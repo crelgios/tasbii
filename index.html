@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Digital Tasbi - 99 Names of Allah">
+    <title>Tasbeeh Counter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="text-center">
+            <div class="header-controls">
+                <div class="reset-controls">
+                    <button id="reset-btn" class="control-button">
+                        <i class="fas fa-redo"></i> Reset Current
+                    </button>
+                    <button id="reset-all-btn" class="control-button danger">
+                        <i class="fas fa-trash"></i> Reset All
+                    </button>
+                </div>
+                <div class="theme-toggle-container">
+                    <button id="theme-toggle" class="theme-toggle">
+                        <i class="fas fa-sun"></i> Light Mode
+                    </button>
+                </div>
+            </div>
+            <h1>Tasbeeh Counter</h1>
+            <p class="subtitle">Count recitations of the names of Allah</p>
+        </header>
+        
+        <main class="counter-container">
+            <div class="name-card">
+                <div class="name-display">
+                    <h2 id="name-arabic" class="arabic-text"></h2>
+                    <p id="name-english" class="transliteration"></p>
+                    <p id="name-meaning" class="meaning"></p>
+                </div>
+                
+                <!-- Count Display -->
+                <h3 id="counter" class="counter-number">0</h3>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-inner" id="progress-bar"></div>
+                    </div>
+                </div>
+                
+                <!-- Big Count Button -->
+                <div class="count-button-container">
+                    <button id="count-btn" class="count-button">
+                        <i class="fas fa-plus fa-2x"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Names Grid -->
+        <div class="names-section">
+            <h3 class="text-center">Names of Allah</h3>
+            <div id="names-container" class="names-grid">
+                <!-- Names will be dynamically inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Controls section removed as buttons moved to header -->
+        
+        <footer>
+            <p>Remember Allah with a sincere heart</p>
+        </footer>
+    </div>
+    
+    <script src="assets/names.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
