@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // App State
     let counter = 0;
     let currentNameIndex = 0;
-    let isDarkMode = true; // Default to dark mode
+    let isDarkMode = false; // Default to dark mode
     
     // Initialize the app
     initializeApp();
