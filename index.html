@@ -524,5 +524,28 @@ const counterElement=document.getElementById('counter'),nameArabicElement=docume
 function safeLoad(){try{return JSON.parse(localStorage.getItem('tasbiPremiumState')||localStorage.getItem('tasbiState')||'null')}catch(e){return null}}function initializeApp(){const saved=safeLoad();if(saved){counter=Number(saved.counter)||0;currentNameIndex=Number(saved.currentNameIndex)||0;isDarkMode=!!saved.isDarkMode;totalRecitations=Number(saved.totalRecitations)||((currentNameIndex*100)+counter)}applyTheme();updateAll();populateNamesGrid()}function handleCount(e){createRipple(e);counter++;totalRecitations++;if(counter>=100){counter=0;currentNameIndex=(currentNameIndex+1)%ALLAH_NAMES.length;celebrate();showToast('MashaAllah! Next name unlocked ✨');nameDisplayElement.classList.add('fade-out');setTimeout(()=>{updateNameDisplay();updateNamesGrid();nameDisplayElement.classList.remove('fade-out');nameDisplayElement.classList.add('fade-in');setTimeout(()=>nameDisplayElement.classList.remove('fade-in'),500)},230)}updateAll(false);saveProgress()}function updateAll(updateName=true){if(updateName)updateNameDisplay();updateCounter();updateProgress();updateStats()}function updateCounter(){counterElement.textContent=counter}function updateNameDisplay(){const n=ALLAH_NAMES[currentNameIndex]||ALLAH_NAMES[0];nameArabicElement.textContent=n.arabic;nameEnglishElement.textContent=n.english;nameMeaningElement.textContent=n.meaning}function updateProgress(){const pct=Math.min(100,(counter/100)*100);ring.style.setProperty('--angle',(pct*3.6)+'deg');progressText.textContent=counter+' / 100 recitations'}function updateStats(){currentStat.textContent=(currentNameIndex+1)+'/99';totalStat.textContent=totalRecitations;completeStat.textContent=Math.floor(totalRecitations/100)}function populateNamesGrid(filter=''){namesContainer.innerHTML='';const q=filter.trim().toLowerCase();ALLAH_NAMES.forEach((name,index)=>{const hay=(name.english+' '+name.meaning+' '+name.arabic).toLowerCase();if(q&&!hay.includes(q))return;const item=document.createElement('button');item.type='button';item.className='name-item'+(index===currentNameIndex?' active':'');item.innerHTML='<div class="name-item-number">'+(index+1)+'</div><div class="name-item-text">'+name.english+'</div><div class="name-item-ar">'+name.arabic+'</div>';item.onclick=()=>{currentNameIndex=index;counter=0;updateAll();populateNamesGrid(searchInput.value);saveProgress();window.scrollTo({top:0,behavior:'smooth'})};namesContainer.appendChild(item)})}function updateNamesGrid(){populateNamesGrid(searchInput.value)}function resetCurrentCounter(){counter=0;updateAll();saveProgress();showToast('Current counter reset')}function resetAllProgress(){if(confirm('Reset all Tasbeeh progress?')){counter=0;currentNameIndex=0;totalRecitations=0;updateAll();populateNamesGrid(searchInput.value);saveProgress();showToast('All progress reset')}}function toggleTheme(){isDarkMode=!isDarkMode;applyTheme();saveProgress()}function applyTheme(){document.documentElement.setAttribute('data-theme',isDarkMode?'dark':'light');themeToggleButton.innerHTML=isDarkMode?'<i class="fas fa-sun"></i> Light Mode':'<i class="fas fa-moon"></i> Dark Mode'}function saveProgress(){localStorage.setItem('tasbiPremiumState',JSON.stringify({counter,currentNameIndex,isDarkMode,totalRecitations}))}function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),1800)}function createRipple(e){const rect=countButton.getBoundingClientRect();const x=((e&&e.touches&&e.touches[0]?e.touches[0].clientX:e&&e.clientX?e.clientX:rect.left+rect.width/2)-rect.left);const y=((e&&e.touches&&e.touches[0]?e.touches[0].clientY:e&&e.clientY?e.clientY:rect.top+rect.height/2)-rect.top);const s=document.createElement('span');s.style.cssText='position:absolute;left:'+x+'px;top:'+y+'px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.65);transform:translate(-50%,-50%) scale(0);animation:rip .6s ease-out forwards;pointer-events:none';countButton.appendChild(s);setTimeout(()=>s.remove(),650)}function celebrate(){const cx=window.innerWidth/2,cy=window.innerHeight*.45;for(let i=0;i<34;i++){const sp=document.createElement('i');sp.className='spark';const a=Math.random()*Math.PI*2,d=80+Math.random()*140;sp.style.left=cx+'px';sp.style.top=cy+'px';sp.style.width=sp.style.height=(5+Math.random()*7)+'px';sp.style.setProperty('--x',Math.cos(a)*d+'px');sp.style.setProperty('--y',Math.sin(a)*d+'px');document.body.appendChild(sp);setTimeout(()=>sp.remove(),900)}}
 countButton.addEventListener('click',handleCount);countButton.addEventListener('touchstart',createRipple,{passive:true});resetButton.addEventListener('click',resetCurrentCounter);resetAllButton.addEventListener('click',resetAllProgress);themeToggleButton.addEventListener('click',toggleTheme);searchInput.addEventListener('input',e=>populateNamesGrid(e.target.value));initializeApp();
 </script>
+
+<script>
+document.addEventListener('gesturestart', function(e){
+  e.preventDefault();
+}, {passive:false});
+
+document.addEventListener('dblclick', function(e){
+  e.preventDefault();
+}, {passive:false});
+
+const tasbeehBtn = document.getElementById('count-btn');
+if (tasbeehBtn) {
+  tasbeehBtn.addEventListener('touchend', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof handleCount === 'function') {
+      handleCount();
+    } else {
+      tasbeehBtn.click();
+    }
+  }, {passive:false});
+}
+</script>
 </body>
 </html>
