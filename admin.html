@@ -3,13 +3,61 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Tasbeeh Counter Premium</title>
+<title>Daily Dhikr Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#ecfff8;--bg2:#eef4ff;--card:rgba(255,255,255,.82);--text:#14213d;--muted:#667085;--primary:#078b72;--primary2:#16c79a;--gold:#d9a441;--danger:#e63946;--line:rgba(7,139,114,.18);--shadow:0 22px 70px rgba(8,61,70,.18);--glass:rgba(255,255,255,.55);--btnText:#fff}html[data-theme='dark']{--bg1:#061b21;--bg2:#07101f;--card:rgba(13,31,39,.82);--text:#f4fffb;--muted:#a9bec4;--primary:#16c79a;--primary2:#6fffe9;--gold:#ffd166;--danger:#ff5c77;--line:rgba(111,255,233,.20);--shadow:0 22px 80px rgba(0,0,0,.42);--glass:rgba(255,255,255,.08);--btnText:#05201b}*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;touch-action:manipulation}body{font-family:'Poppins',system-ui,sans-serif;color:var(--text);overflow-x:hidden;background:radial-gradient(circle at 20% 10%,rgba(22,199,154,.32),transparent 30%),radial-gradient(circle at 85% 18%,rgba(217,164,65,.25),transparent 28%),linear-gradient(135deg,var(--bg1),var(--bg2));padding:18px;transition:.3s background,.3s color}body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.34;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;animation:gridMove 18s linear infinite}body::after{content:"۞";position:fixed;right:-40px;top:-80px;font-family:'Amiri',serif;font-size:300px;color:var(--primary);opacity:.045;pointer-events:none;animation:float 7s ease-in-out infinite}@keyframes gridMove{to{background-position:44px 44px}}@keyframes float{50%{transform:translate(-10px,18px) rotate(6deg)}}.app{width:min(920px,100%);margin:auto;position:relative;z-index:1}.topbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:6px 0 18px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--gold));display:grid;place-items:center;color:white;box-shadow:0 0 30px rgba(22,199,154,.4);font-size:20px}.brand h1{font-size:clamp(1.45rem,5vw,2.25rem);line-height:1.05;color:var(--primary)}.brand p{font-size:.86rem;color:var(--muted);margin-top:3px}.actions{display:flex;gap:8px;flex-wrap:wrap}button{font-family:inherit;-webkit-tap-highlight-color:transparent}.pill{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:10px 13px;border-radius:999px;cursor:pointer;backdrop-filter:blur(12px);box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}.pill:active,.pill:hover{transform:translateY(-1px);border-color:var(--primary)}.pill.danger{color:var(--danger)}.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow);backdrop-filter:blur(18px);overflow:hidden}.counter-card{padding:24px;text-align:center;position:relative}.counter-card::before{content:"";position:absolute;inset:-2px;background:radial-gradient(circle at 50% 18%,rgba(22,199,154,.18),transparent 38%);pointer-events:none}.name-display{position:relative;z-index:1;min-height:155px;display:flex;flex-direction:column;justify-content:center;transition:.3s}.arabic-text{font-family:'Amiri',serif;font-size:clamp(2.4rem,12vw,4.6rem);line-height:1.1;color:var(--primary);text-shadow:0 0 22px rgba(22,199,154,.24)}.transliteration{font-size:clamp(1.15rem,4vw,1.6rem);font-weight:700;margin-top:4px;color:var(--text)}.meaning{color:var(--muted);font-size:.95rem;margin-top:4px}.counter-ring{width:min(245px,72vw);aspect-ratio:1;margin:10px auto 18px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--primary2) var(--angle,0deg),rgba(120,130,140,.18) 0deg)}.counter-ring::before{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--card);box-shadow:inset 0 0 34px rgba(22,199,154,.12)}.counter-number{position:relative;font-size:clamp(3.2rem,16vw,5.2rem);font-weight:800;color:var(--primary);line-height:1}.progress-text{position:relative;margin-top:-8px;color:var(--muted);font-size:.85rem}.count-button{width:min(168px,48vw);height:min(168px,48vw);border-radius:50%;border:0;color:var(--btnText);background:radial-gradient(circle at 35% 25%,var(--primary2),var(--primary));box-shadow:0 18px 40px rgba(22,199,154,.32),inset 0 -10px 18px rgba(0,0,0,.16);font-size:2.2rem;cursor:pointer;position:relative;overflow:hidden;transition:.12s}.count-button:active{transform:scale(.94)}.count-button::after{content:"TAP";position:absolute;bottom:30px;left:0;right:0;font-size:.75rem;font-weight:700;letter-spacing:2px;opacity:.7}.stats{padding:22px;display:grid;gap:14px}.stat{background:var(--glass);border:1px solid var(--line);padding:16px;border-radius:22px;display:flex;justify-content:space-between;align-items:center}.stat strong{font-size:1.25rem;color:var(--primary)}.stat span{color:var(--muted);font-size:.9rem}.quote{padding:18px;border-radius:24px;background:linear-gradient(135deg,rgba(217,164,65,.18),rgba(22,199,154,.12));border:1px solid var(--line);font-size:.95rem;color:var(--muted)}.names-section{margin-top:18px;padding:20px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}.section-title h2{font-size:1.2rem;color:var(--primary)}.search{flex:1;min-width:190px;border:1px solid var(--line);border-radius:999px;padding:12px 14px;background:var(--glass);color:var(--text);outline:none}.names-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;max-height:390px;overflow:auto;padding:2px 4px 2px 2px}.name-item{border:1px solid var(--line);background:var(--glass);border-radius:18px;padding:12px;text-align:left;cursor:pointer;transition:.2s;color:var(--text)}.name-item:hover,.name-item.active{transform:translateY(-2px);border-color:var(--primary);box-shadow:0 10px 24px rgba(22,199,154,.16)}.name-item.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white}.name-item-number{font-size:.75rem;opacity:.72}.name-item-text{font-weight:700;font-size:.92rem;margin-top:2px}.name-item-ar{font-family:'Amiri',serif;font-size:1.3rem;margin-top:4px;direction:rtl}footer{text-align:center;color:var(--muted);font-size:.82rem;margin:18px 0 4px}.fade-out{opacity:0;transform:translateY(-12px) scale(.98)}.fade-in{animation:fadeIn .45s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.spark{position:fixed;border-radius:50%;pointer-events:none;z-index:9;background:var(--gold);animation:spark .85s ease-out forwards}@keyframes spark{to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:12px 18px;color:var(--text);z-index:99;transition:.3s;white-space:nowrap}.toast.show{transform:translateX(-50%) translateY(0)}@keyframes rip{to{transform:translate(-50%,-50%) scale(9);opacity:0}}@media(max-width:760px){body{padding:10px}.hero{grid-template-columns:1fr}.topbar{justify-content:center;text-align:center}.brand{justify-content:center;width:100%}.actions{width:100%;justify-content:center}.counter-card{padding:18px}.names-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:360px}.pill{font-size:.82rem;padding:9px 11px}}@media(max-width:380px){.names-grid{grid-template-columns:1fr}.stat{padding:13px}.arabic-text{font-size:2.3rem}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+:root{--bg1:#ecfff8;--bg2:#eef4ff;--card:rgba(255,255,255,.86);--text:#14213d;--muted:#667085;--primary:#078b72;--primary2:#16c79a;--gold:#d9a441;--danger:#e63946;--line:rgba(7,139,114,.18);--shadow:0 22px 70px rgba(8,61,70,.18);--glass:rgba(255,255,255,.58);--btnText:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Poppins',system-ui,sans-serif;color:var(--text);overflow-x:hidden;background:radial-gradient(circle at 20% 10%,rgba(22,199,154,.32),transparent 30%),radial-gradient(circle at 85% 18%,rgba(217,164,65,.25),transparent 28%),linear-gradient(135deg,var(--bg1),var(--bg2));padding:16px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;animation:gridMove 18s linear infinite}
+@keyframes gridMove{to{background-position:44px 44px}}
+.app{width:min(1120px,100%);margin:auto;position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:17px;background:linear-gradient(135deg,var(--primary),var(--gold));display:grid;place-items:center;color:white;box-shadow:0 0 30px rgba(22,199,154,.4);font-size:22px}
+h1{font-size:clamp(1.45rem,5vw,2.25rem);line-height:1;color:var(--primary)}
+.brand p{font-size:.86rem;color:var(--muted);margin-top:5px}
+.actions,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:11px 14px;border-radius:999px;cursor:pointer;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);border-color:var(--primary)}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffd166);color:#3a2a00;border-color:transparent}
+.btn.danger{color:var(--danger)}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(18px);overflow:hidden}
+.card-head{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.card-head h2{font-size:1.1rem;color:var(--primary)}
+.card-body{padding:18px}
+.field{display:grid;gap:7px;margin-bottom:13px}
+label{font-weight:800;color:var(--primary);font-size:.9rem}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:18px;padding:13px 14px;background:rgba(255,255,255,.62);color:var(--text);font:inherit;font-size:16px;outline:none}
+textarea{min-height:120px;resize:vertical;line-height:1.7}
+textarea.arabic{font-family:'Amiri',serif;font-size:1.45rem;direction:rtl;text-align:right}
+.pack-list{display:grid;gap:10px}
+.pack-item{border:1px solid var(--line);border-radius:20px;background:var(--glass);padding:13px;cursor:pointer;transition:.2s}
+.pack-item:hover,.pack-item.active{border-color:var(--primary);transform:translateY(-1px)}
+.pack-item.active{background:linear-gradient(135deg,rgba(7,139,114,.14),rgba(22,199,154,.12))}
+.pack-title{font-weight:800;color:var(--text)}
+.pack-meta{font-size:.8rem;color:var(--muted);margin-top:4px}
+.step-list{display:grid;gap:12px}
+.step{border:1px solid var(--line);background:var(--glass);border-radius:22px;padding:14px}
+.step-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.step-title{font-weight:800;color:var(--primary)}
+.step-ar{font-family:'Amiri',serif;direction:rtl;text-align:right;font-size:1.35rem;line-height:1.7;margin:8px 0;color:var(--text)}
+.step-note{color:var(--muted);font-size:.88rem}
+.small{font-size:.82rem;color:var(--muted)}
+.hidden{display:none!important}
+.preview{padding:18px;display:grid;gap:12px}
+.preview-card{text-align:center;padding:22px;border-radius:24px;background:linear-gradient(135deg,rgba(22,199,154,.12),rgba(217,164,65,.12));border:1px solid var(--line)}
+.preview-card h3{color:var(--primary);font-size:1.25rem}
+.preview-ar{font-family:'Amiri',serif;font-size:clamp(1.8rem,6vw,3.2rem);line-height:1.6;direction:rtl;margin:12px 0}
+.codebox{font-family:ui-monospace,Consolas,monospace;font-size:.82rem;line-height:1.5;background:#07101f;color:#e8fff8;border-radius:20px;padding:14px;max-height:310px;overflow:auto;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:12px 18px;color:var(--text);z-index:99;transition:.3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:860px){body{padding:10px}.grid{grid-template-columns:1fr}.topbar{justify-content:center;text-align:center}.brand{width:100%;justify-content:center}.actions{justify-content:center;width:100%}.card{border-radius:24px}.btn{font-size:.84rem;padding:10px 12px}}
 /* Smooth page/tab transition */
 body{animation:pageFadeIn .42s ease both;}
 body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
@@ -20,15 +68,430 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
 
 </style>
 </head>
-<body>
-<div class="app"><header class="topbar"><div class="brand"><div class="logo"><i class="fas fa-mosque"></i></div><div><h1>Tasbeeh Counter</h1><p>99 Names of Allah • saved automatically</p></div></div><div class="actions"><a href="daily-dhikr.html" class="pill"><i class="fas fa-book-open"></i> Daily Dhikr</a><a href="admin.html" id="admin-tab" class="pill" style="display:none"><i class="fas fa-lock"></i> Admin</a><button id="reset-btn" class="pill"><i class="fas fa-redo"></i> Reset Current</button><button id="reset-all-btn" class="pill danger"><i class="fas fa-trash"></i> Reset All</button><button id="theme-toggle" class="pill"><i class="fas fa-moon"></i> Dark Mode</button></div></header><main class="hero"><section class="card counter-card"><div class="name-display"><h2 id="name-arabic" class="arabic-text"></h2><p id="name-english" class="transliteration"></p><p id="name-meaning" class="meaning"></p></div><div class="counter-ring" id="counter-ring"><h3 id="counter" class="counter-number">0</h3></div><p class="progress-text" id="progress-text">0 / 100 recitations</p><button id="count-btn" class="count-button" aria-label="Add count"><i class="fas fa-plus"></i></button></section><aside class="card stats"><div class="stat"><span>Current Name</span><strong id="current-stat">1/99</strong></div><div class="stat"><span>Total Recitations</span><strong id="total-stat">0</strong></div><div class="stat"><span>Completed Names</span><strong id="complete-stat">0</strong></div><div class="quote">“Remember Allah with a sincere heart.”</div></aside></main><section class="card names-section"><div class="section-title"><h2>Names of Allah</h2><input id="search" class="search" placeholder="Search name or meaning..." /></div><div id="names-container" class="names-grid"></div></section><footer>May your remembrance be accepted</footer></div><div id="toast" class="toast"></div>
+<body><script>
+(function(){
+  const ADMIN_PASSWORD = '786';
+  if (sessionStorage.getItem('adminUnlocked') === 'yes') return;
+  const pass = prompt('Enter admin password');
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('adminUnlocked', 'yes');
+  } else {
+    alert('Wrong password');
+    window.location.href = 'index.html';
+  }
+})();
+</script>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">☾</div>
+      <div>
+        <h1>Daily Dhikr Admin</h1>
+        <p>Private page to manage dua packs easily</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="index.html">← Back to Daily Dhikr</a>
+      <button class="btn primary" id="exportBtn">Export Code</button>
+      <button class="btn gold" id="downloadBtn">Download JSON</button>
+      <a class="btn primary" href="daily-dhikr.html">Open Daily Dhikr</a>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <div class="card-head">
+        <h2>Dua Packs</h2>
+        <button class="btn primary" id="newPackBtn">+ New Pack</button>
+      </div>
+      <div class="card-body">
+        <div id="packList" class="pack-list"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 id="editorTitle">Edit Pack</h2>
+        <div class="row">
+          <button class="btn danger" id="deletePackBtn">Delete Pack</button>
+          <button class="btn primary" id="savePackBtn">Save</button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label>Pack Name</label>
+          <input id="packName" placeholder="Example: Dua for Evil Eye" />
+        </div>
+        <div class="field">
+          <label>Short Description</label>
+          <input id="packDesc" placeholder="Example: Protection routine" />
+        </div>
+
+        <div class="card" style="box-shadow:none;margin:14px 0">
+          <div class="card-head">
+            <h2>Steps / Duas</h2>
+            <button class="btn primary" id="addStepBtn">+ Add Dua</button>
+          </div>
+          <div class="card-body">
+            <div id="stepList" class="step-list"></div>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none">
+          <div class="card-head">
+            <h2>Live Preview</h2>
+            <span class="small">First step preview</span>
+          </div>
+          <div id="preview" class="preview"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="card" style="margin-top:18px">
+    <div class="card-head">
+      <h2>Export for your Daily Dhikr code</h2>
+      <button class="btn" id="copyCodeBtn">Copy Code</button>
+    </div>
+    <div class="card-body">
+      <p class="small" style="margin-bottom:10px">Download JSON and replace <b>dhikr-packs.json</b> in your GitHub project. Saved changes also preview instantly in this browser.</p>
+      <div id="codeBox" class="codebox"></div>
+    </div>
+  </section>
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script>
-const ALLAH_NAMES = [
-{arabic:'الرَّحْمَنُ',english:'Ar-Rahman',meaning:'The Most Compassionate'},{arabic:'الرَّحِيمُ',english:'Ar-Raheem',meaning:'The Most Merciful'},{arabic:'الْمَلِكُ',english:'Al-Malik',meaning:'The King, The Sovereign'},{arabic:'الْقُدُّوسُ',english:'Al-Quddus',meaning:'The Most Holy'},{arabic:'السَّلاَمُ',english:'As-Salam',meaning:'The Source of Peace'},{arabic:'الْمُؤْمِنُ',english:"Al-Mu'min",meaning:'The Guardian of Faith'},{arabic:'الْمُهَيْمِنُ',english:'Al-Muhaymin',meaning:'The Protector'},{arabic:'الْعَزِيزُ',english:'Al-Aziz',meaning:'The Mighty'},{arabic:'الْجَبَّارُ',english:'Al-Jabbar',meaning:'The Compeller'},{arabic:'الْمُتَكَبِّرُ',english:'Al-Mutakabbir',meaning:'The Greatest'},{arabic:'الْخَالِقُ',english:'Al-Khaliq',meaning:'The Creator'},{arabic:'الْبَارِئُ',english:'Al-Bari',meaning:'The Maker'},{arabic:'الْمُصَوِّرُ',english:'Al-Musawwir',meaning:'The Fashioner'},{arabic:'الْغَفَّارُ',english:'Al-Ghaffar',meaning:'The Forgiver'},{arabic:'الْقَهَّارُ',english:'Al-Qahhar',meaning:'The Subduer'},{arabic:'الْوَهَّابُ',english:'Al-Wahhab',meaning:'The Bestower'},{arabic:'الرَّزَّاقُ',english:'Ar-Razzaq',meaning:'The Provider'},{arabic:'الْفَتَّاحُ',english:'Al-Fattah',meaning:'The Opener'},{arabic:'اَلْعَلِيْمُ',english:'Al-Alim',meaning:'The All-Knowing'},{arabic:'الْقَابِضُ',english:'Al-Qabid',meaning:'The Constrictor'},{arabic:'الْبَاسِطُ',english:'Al-Basit',meaning:'The Expander'},{arabic:'الْخَافِضُ',english:'Al-Khafid',meaning:'The Abaser'},{arabic:'الرَّافِعُ',english:'Ar-Rafi',meaning:'The Exalter'},{arabic:'الْمُعِزُّ',english:"Al-Mu'izz",meaning:'The Bestower of Honors'},{arabic:'المُذِلُّ',english:'Al-Mudhill',meaning:'The Humiliator'},{arabic:'السَّمِيعُ',english:'As-Sami',meaning:'The All-Hearing'},{arabic:'الْبَصِيرُ',english:'Al-Basir',meaning:'The All-Seeing'},{arabic:'الْحَكَمُ',english:'Al-Hakam',meaning:'The Judge'},{arabic:'الْعَدْلُ',english:'Al-Adl',meaning:'The Just'},{arabic:'اللَّطِيفُ',english:'Al-Latif',meaning:'The Subtle One'},{arabic:'الْخَبِيرُ',english:'Al-Khabir',meaning:'The All-Aware'},{arabic:'الْحَلِيمُ',english:'Al-Halim',meaning:'The Forbearing'},{arabic:'الْعَظِيمُ',english:'Al-Azim',meaning:'The Magnificent'},{arabic:'الْغَفُورُ',english:'Al-Ghafur',meaning:'The Forgiving'},{arabic:'الشَّكُورُ',english:'Ash-Shakur',meaning:'The Appreciative'},{arabic:'الْعَلِيُّ',english:'Al-Ali',meaning:'The Most High'},{arabic:'الْكَبِيرُ',english:'Al-Kabir',meaning:'The Greatest'},{arabic:'الْحَفِيظُ',english:'Al-Hafiz',meaning:'The Preserver'},{arabic:'المُقيِت',english:'Al-Muqit',meaning:'The Sustainer'},{arabic:'الْحسِيبُ',english:'Al-Hasib',meaning:'The Reckoner'},{arabic:'الْجَلِيلُ',english:'Al-Jalil',meaning:'The Majestic'},{arabic:'الْكَرِيمُ',english:'Al-Karim',meaning:'The Generous'},{arabic:'الرَّقِيبُ',english:'Ar-Raqib',meaning:'The Watchful'},{arabic:'الْمُجِيبُ',english:'Al-Mujib',meaning:'The Responsive'},{arabic:'الْوَاسِعُ',english:'Al-Wasi',meaning:'The All-Encompassing'},{arabic:'الْحَكِيمُ',english:'Al-Hakim',meaning:'The Wise'},{arabic:'الْوَدُودُ',english:'Al-Wadud',meaning:'The Loving'},{arabic:'الْمَجِيدُ',english:'Al-Majid',meaning:'The Glorious'},{arabic:'الْبَاعِثُ',english:"Al-Ba'ith",meaning:'The Resurrector'},{arabic:'الشَّهِيدُ',english:'Ash-Shahid',meaning:'The Witness'},{arabic:'الْحَقُّ',english:'Al-Haqq',meaning:'The Truth'},{arabic:'الْوَكِيلُ',english:'Al-Wakil',meaning:'The Trustee'},{arabic:'الْقَوِيُّ',english:'Al-Qawiyy',meaning:'The Strong'},{arabic:'الْمَتِينُ',english:'Al-Matin',meaning:'The Firm'},{arabic:'الْوَلِيُّ',english:'Al-Waliyy',meaning:'The Protector'},{arabic:'الْحَمِيدُ',english:'Al-Hamid',meaning:'The Praiseworthy'},{arabic:'الْمُحْصِي',english:'Al-Muhsi',meaning:'The Accounter'},{arabic:'الْمُبْدِئُ',english:'Al-Mubdi',meaning:'The Originator'},{arabic:'الْمُعِيدُ',english:"Al-Mu'id",meaning:'The Restorer'},{arabic:'الْمُحْيِي',english:'Al-Muhyi',meaning:'The Giver of Life'},{arabic:'اَلْمُمِيتُ',english:'Al-Mumit',meaning:'The Taker of Life'},{arabic:'الْحَيُّ',english:'Al-Hayy',meaning:'The Ever-Living'},{arabic:'الْقَيُّومُ',english:'Al-Qayyum',meaning:'The Self-Subsisting'},{arabic:'الْوَاجِدُ',english:'Al-Wajid',meaning:'The Finder'},{arabic:'الْمَاجِدُ',english:'Al-Majid',meaning:'The Noble'},{arabic:'الْواحِدُ',english:'Al-Wahid',meaning:'The One'},{arabic:'اَلاَحَدُ',english:'Al-Ahad',meaning:'The Unique'},{arabic:'الصَّمَدُ',english:'As-Samad',meaning:'The Eternal'},{arabic:'الْقَادِرُ',english:'Al-Qadir',meaning:'The Capable'},{arabic:'الْمُقْتَدِرُ',english:'Al-Muqtadir',meaning:'The Powerful'},{arabic:'الْمُقَدِّمُ',english:'Al-Muqaddim',meaning:'The Expediter'},{arabic:'الْمُؤَخِّرُ',english:"Al-Mu'akhkhir",meaning:'The Delayer'},{arabic:'الأوَّلُ',english:'Al-Awwal',meaning:'The First'},{arabic:'الآخِرُ',english:'Al-Akhir',meaning:'The Last'},{arabic:'الظَّاهِرُ',english:'Az-Zahir',meaning:'The Manifest'},{arabic:'الْبَاطِنُ',english:'Al-Batin',meaning:'The Hidden'},{arabic:'الْوَالِي',english:'Al-Wali',meaning:'The Governor'},{arabic:'الْمُتَعَالِي',english:"Al-Muta'ali",meaning:'The Most Exalted'},{arabic:'الْبَرُّ',english:'Al-Barr',meaning:'The Source of Goodness'},{arabic:'التَّوَابُ',english:'At-Tawwab',meaning:'The Acceptor of Repentance'},{arabic:'الْمُنْتَقِمُ',english:'Al-Muntaqim',meaning:'The Avenger'},{arabic:'العَفُوُّ',english:"Al-'Afuww",meaning:'The Pardoner'},{arabic:'الرَّؤُوفُ',english:"Ar-Ra'uf",meaning:'The Compassionate'},{arabic:'مَالِكُ الْمُلْكِ',english:'Malik-ul-Mulk',meaning:'Owner of All Sovereignty'},{arabic:'ذُوالْجَلاَلِ وَالإكْرَام',english:'Dhul-Jalali wal-Ikram',meaning:'Lord of Majesty and Honor'},{arabic:'الْمُقْسِطُ',english:'Al-Muqsit',meaning:'The Equitable'},{arabic:'الْجَامِعُ',english:'Al-Jami',meaning:'The Gatherer'},{arabic:'الْغَنِيُّ',english:'Al-Ghani',meaning:'The Self-Sufficient'},{arabic:'الْمُغْنِي',english:'Al-Mughni',meaning:'The Enricher'},{arabic:'اَلْمَانِعُ',english:"Al-Mani'",meaning:'The Preventer'},{arabic:'الضَّارَّ',english:'Ad-Darr',meaning:'The Distressor'},{arabic:'النَّافِعُ',english:'An-Nafi',meaning:'The Benefactor'},{arabic:'النُّورُ',english:'An-Nur',meaning:'The Light'},{arabic:'الْهَادِي',english:'Al-Hadi',meaning:'The Guide'},{arabic:'الْبَدِيعُ',english:'Al-Badi',meaning:'The Originator'},{arabic:'اَلْبَاقِي',english:'Al-Baqi',meaning:'The Everlasting'},{arabic:'الْوَارِثُ',english:'Al-Warith',meaning:'The Inheritor'},{arabic:'الرَّشِيدُ',english:'Ar-Rashid',meaning:'The Guide to the Right Path'},{arabic:'الصَّبُورُ',english:'As-Sabur',meaning:'The Patient'}
-];
-const counterElement=document.getElementById('counter'),nameArabicElement=document.getElementById('name-arabic'),nameEnglishElement=document.getElementById('name-english'),nameMeaningElement=document.getElementById('name-meaning'),countButton=document.getElementById('count-btn'),resetButton=document.getElementById('reset-btn'),resetAllButton=document.getElementById('reset-all-btn'),nameDisplayElement=document.querySelector('.name-display'),themeToggleButton=document.getElementById('theme-toggle'),namesContainer=document.getElementById('names-container'),ring=document.getElementById('counter-ring'),progressText=document.getElementById('progress-text'),currentStat=document.getElementById('current-stat'),totalStat=document.getElementById('total-stat'),completeStat=document.getElementById('complete-stat'),searchInput=document.getElementById('search'),toast=document.getElementById('toast');let counter=0,currentNameIndex=0,isDarkMode=false,totalRecitations=0;let lastTap=0;
-function safeLoad(){try{return JSON.parse(localStorage.getItem('tasbiPremiumState')||localStorage.getItem('tasbiState')||'null')}catch(e){return null}}function initializeApp(){const saved=safeLoad();if(saved){counter=Number(saved.counter)||0;currentNameIndex=Number(saved.currentNameIndex)||0;isDarkMode=!!saved.isDarkMode;totalRecitations=Number(saved.totalRecitations)||((currentNameIndex*100)+counter)}applyTheme();updateAll();populateNamesGrid()}function handleCount(e){if(e){e.preventDefault()}const now=Date.now();if(now-lastTap<220)return;lastTap=now;createRipple(e);counter++;totalRecitations++;if(counter>=100){counter=0;currentNameIndex=(currentNameIndex+1)%ALLAH_NAMES.length;celebrate();showToast('MashaAllah! Next name unlocked ✨');nameDisplayElement.classList.add('fade-out');setTimeout(()=>{updateNameDisplay();updateNamesGrid();nameDisplayElement.classList.remove('fade-out');nameDisplayElement.classList.add('fade-in');setTimeout(()=>nameDisplayElement.classList.remove('fade-in'),500)},230)}updateAll(false);saveProgress()}function updateAll(updateName=true){if(updateName)updateNameDisplay();updateCounter();updateProgress();updateStats()}function updateCounter(){counterElement.textContent=counter}function updateNameDisplay(){const n=ALLAH_NAMES[currentNameIndex]||ALLAH_NAMES[0];nameArabicElement.textContent=n.arabic;nameEnglishElement.textContent=n.english;nameMeaningElement.textContent=n.meaning}function updateProgress(){const pct=Math.min(100,(counter/100)*100);ring.style.setProperty('--angle',(pct*3.6)+'deg');progressText.textContent=counter+' / 100 recitations'}function updateStats(){currentStat.textContent=(currentNameIndex+1)+'/99';totalStat.textContent=totalRecitations;completeStat.textContent=Math.floor(totalRecitations/100)}const ADMIN_PASSWORD='786';function revealAdminTab(){const tab=document.getElementById('admin-tab');if(tab){tab.style.display='inline-flex'}}function unlockAdminTab(){if(sessionStorage.getItem('adminUnlocked')==='yes'){revealAdminTab();showToast('Admin tab already unlocked');return}const pass=prompt('Enter admin password');if(pass===ADMIN_PASSWORD){sessionStorage.setItem('adminUnlocked','yes');revealAdminTab();showToast('Admin tab unlocked')}else if(pass!==null){showToast('Wrong password')}}function checkAdminUnlock(){if(sessionStorage.getItem('adminUnlocked')==='yes')revealAdminTab()}function populateNamesGrid(filter=''){namesContainer.innerHTML='';const q=filter.trim().toLowerCase();ALLAH_NAMES.forEach((name,index)=>{const hay=(name.english+' '+name.meaning+' '+name.arabic).toLowerCase();if(q&&!hay.includes(q))return;const item=document.createElement('button');item.type='button';item.className='name-item'+(index===currentNameIndex?' active':'');item.innerHTML='<div class="name-item-number">'+(index+1)+'</div><div class="name-item-text">'+name.english+'</div><div class="name-item-ar">'+name.arabic+'</div>';item.onclick=()=>{currentNameIndex=index;counter=0;updateAll();populateNamesGrid(searchInput.value);saveProgress();if(name.english==="Al-Muta'ali"){unlockAdminTab()}window.scrollTo({top:0,behavior:'smooth'})};namesContainer.appendChild(item)})}function updateNamesGrid(){populateNamesGrid(searchInput.value)}function resetCurrentCounter(){counter=0;updateAll();saveProgress();showToast('Current counter reset')}function resetAllProgress(){if(confirm('Reset all Tasbeeh progress?')){counter=0;currentNameIndex=0;totalRecitations=0;updateAll();populateNamesGrid(searchInput.value);saveProgress();showToast('All progress reset')}}function toggleTheme(){isDarkMode=!isDarkMode;applyTheme();saveProgress()}function applyTheme(){document.documentElement.setAttribute('data-theme',isDarkMode?'dark':'light');themeToggleButton.innerHTML=isDarkMode?'<i class="fas fa-sun"></i> Light Mode':'<i class="fas fa-moon"></i> Dark Mode'}function saveProgress(){localStorage.setItem('tasbiPremiumState',JSON.stringify({counter,currentNameIndex,isDarkMode,totalRecitations}))}function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),1800)}function createRipple(e){const rect=countButton.getBoundingClientRect();const point=e&&e.touches&&e.touches[0]?e.touches[0]:e;const x=((point&&point.clientX?point.clientX:rect.left+rect.width/2)-rect.left);const y=((point&&point.clientY?point.clientY:rect.top+rect.height/2)-rect.top);const s=document.createElement('span');s.style.cssText='position:absolute;left:'+x+'px;top:'+y+'px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.65);transform:translate(-50%,-50%) scale(0);animation:rip .6s ease-out forwards;pointer-events:none';countButton.appendChild(s);setTimeout(()=>s.remove(),650)}function celebrate(){const cx=window.innerWidth/2,cy=window.innerHeight*.45;for(let i=0;i<34;i++){const sp=document.createElement('i');sp.className='spark';const a=Math.random()*Math.PI*2,d=80+Math.random()*140;sp.style.left=cx+'px';sp.style.top=cy+'px';sp.style.width=sp.style.height=(5+Math.random()*7)+'px';sp.style.setProperty('--x',Math.cos(a)*d+'px');sp.style.setProperty('--y',Math.sin(a)*d+'px');document.body.appendChild(sp);setTimeout(()=>sp.remove(),900)}}
-countButton.addEventListener('click',handleCount);resetButton.addEventListener('click',resetCurrentCounter);resetAllButton.addEventListener('click',resetAllProgress);themeToggleButton.addEventListener('click',toggleTheme);searchInput.addEventListener('input',e=>populateNamesGrid(e.target.value));document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});initializeApp();checkAdminUnlock();
+const STORAGE_KEY = "dailyDhikrPacksAdmin";
+
+const DEFAULT_PACKS = {
+  "beforeSleep": {
+    "name": "Before Sleep",
+    "desc": "3 simple bedtime duas",
+    "steps": [
+      {
+        "title": "Ayat ul Kursi",
+        "target": 1,
+        "arabic": "اللّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Astaghfirullah",
+        "target": 1,
+        "arabic": "أَسْتَغْفِرُ اللهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Allahumma Bismika",
+        "target": 1,
+        "arabic": "اللّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا",
+        "note": "Recite 1 time"
+      }
+    ]
+  },
+  "evilEye": {
+    "name": "Dua for Evil Eye",
+    "desc": "Protection pack with Durood and Surahs",
+    "steps": [
+      {
+        "title": "Durood e Pak",
+        "target": 3,
+        "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+        "note": "Recite 3 times"
+      },
+      {
+        "title": "Surah Al-Fatiha",
+        "target": 1,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ ۝ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ مَـٰلِكِ يَوْمِ ٱلدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ ۝ صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah Ikhlas",
+        "target": 1,
+        "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah An-Naas",
+        "target": 1,
+        "arabic": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah Al-Falaq",
+        "target": 1,
+        "arabic": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Dua for Evil Eye",
+        "target": 1,
+        "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ، وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Durood e Pak",
+        "target": 3,
+        "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+        "note": "Recite 3 times at the end"
+      }
+    ]
+  }
+};
+const PACK_SOURCE_URL = "dhikr-packs.json";
+
+let packs = {};
+let activeKey = "beforeSleep";
+
+const packList = document.getElementById("packList");
+const stepList = document.getElementById("stepList");
+const packName = document.getElementById("packName");
+const packDesc = document.getElementById("packDesc");
+const codeBox = document.getElementById("codeBox");
+const preview = document.getElementById("preview");
+const toast = document.getElementById("toast");
+
+function slugify(text){
+  const base = String(text || "pack").toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
+  let key = base || "pack";
+  let i = 2;
+  while(packs[key]) key = base + "_" + i++;
+  return key;
+}
+
+async function init(){
+  packs = await loadPacks();
+  activeKey = Object.keys(packs)[0] || "beforeSleep";
+  renderAll();
+}
+
+async function loadPacks(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if(saved && typeof saved === "object") return saved;
+  }catch(e){}
+  try{
+    const res = await fetch(PACK_SOURCE_URL, {cache:"no-store"});
+    if(res.ok) return await res.json();
+  }catch(e){
+    console.warn("dhikr-packs.json could not be loaded. Using default packs.", e);
+  }
+  return structuredClone(DEFAULT_PACKS);
+}
+
+function savePacks(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(packs));
+  renderCode();
+}
+
+function renderPacks(){
+  packList.innerHTML = "";
+  Object.entries(packs).forEach(([key, pack]) => {
+    const div = document.createElement("div");
+    div.className = "pack-item" + (key === activeKey ? " active" : "");
+    div.innerHTML = `
+      <div class="pack-title">${escapeHtml(pack.name || key)}</div>
+      <div class="pack-meta">${(pack.steps || []).length} steps • ${escapeHtml(pack.desc || "No description")}</div>
+    `;
+    div.onclick = () => {
+      activeKey = key;
+      renderAll();
+    };
+    packList.appendChild(div);
+  });
+}
+
+function renderEditor(){
+  const pack = packs[activeKey];
+  if(!pack) return;
+  packName.value = pack.name || "";
+  packDesc.value = pack.desc || "";
+  renderSteps();
+  renderPreview();
+}
+
+function renderSteps(){
+  const pack = packs[activeKey];
+  stepList.innerHTML = "";
+  (pack.steps || []).forEach((step, index) => {
+    const div = document.createElement("div");
+    div.className = "step";
+    div.innerHTML = `
+      <div class="step-top">
+        <div class="step-title">Step ${index + 1}: ${escapeHtml(step.title || "Untitled")}</div>
+        <div class="row">
+          <button class="btn" onclick="moveStep(${index}, -1)">↑</button>
+          <button class="btn" onclick="moveStep(${index}, 1)">↓</button>
+          <button class="btn danger" onclick="deleteStep(${index})">Delete</button>
+        </div>
+      </div>
+      <div class="field"><label>Title</label><input value="${escapeAttr(step.title || "")}" oninput="updateStep(${index}, 'title', this.value)"></div>
+      <div class="field"><label>Times</label><input type="number" min="1" value="${Number(step.target) || 1}" oninput="updateStep(${index}, 'target', this.value)"></div>
+      <div class="field"><label>Arabic / Dua Text</label><textarea class="arabic" oninput="updateStep(${index}, 'arabic', this.value)">${escapeHtml(step.arabic || "")}</textarea></div>
+      <div class="field"><label>Note</label><input value="${escapeAttr(step.note || "")}" oninput="updateStep(${index}, 'note', this.value)"></div>
+      <div class="step-ar">${escapeHtml(step.arabic || "")}</div>
+      <div class="step-note">${escapeHtml(step.note || "")}</div>
+    `;
+    stepList.appendChild(div);
+  });
+}
+
+function renderPreview(){
+  const pack = packs[activeKey];
+  const step = (pack.steps || [])[0];
+  if(!step){
+    preview.innerHTML = `<div class="preview-card"><h3>No steps yet</h3><p class="small">Add your first dua.</p></div>`;
+    return;
+  }
+  preview.innerHTML = `
+    <div class="preview-card">
+      <h3>${escapeHtml(pack.name || "Pack")}</h3>
+      <div class="small">Step 1 of ${(pack.steps || []).length} • ${Number(step.target) || 1} time(s)</div>
+      <div class="preview-ar">${escapeHtml(step.arabic || "")}</div>
+      <b>${escapeHtml(step.title || "")}</b>
+      <p class="small">${escapeHtml(step.note || "")}</p>
+    </div>
+  `;
+}
+
+function renderCode(){
+  codeBox.textContent = "const DHIKR_PACKS = " + JSON.stringify(packs, null, 2) + ";";
+}
+
+function renderAll(){
+  renderPacks();
+  renderEditor();
+  renderCode();
+}
+
+function savePackFromInputs(){
+  const pack = packs[activeKey];
+  if(!pack) return;
+  pack.name = packName.value.trim() || "Untitled Pack";
+  pack.desc = packDesc.value.trim();
+  savePacks();
+  renderAll();
+  showToast("Pack saved");
+}
+
+function addPack(){
+  const name = prompt("Pack name?");
+  if(!name) return;
+  const key = slugify(name);
+  packs[key] = {name, desc:"", steps:[]};
+  activeKey = key;
+  savePacks();
+  renderAll();
+  showToast("New pack created");
+}
+
+function deletePack(){
+  const keys = Object.keys(packs);
+  if(keys.length <= 1){
+    showToast("Keep at least one pack");
+    return;
+  }
+  if(!confirm("Delete this pack?")) return;
+  delete packs[activeKey];
+  activeKey = Object.keys(packs)[0];
+  savePacks();
+  renderAll();
+  showToast("Pack deleted");
+}
+
+function addStep(){
+  const pack = packs[activeKey];
+  pack.steps = pack.steps || [];
+  pack.steps.push({title:"New Dua", target:1, arabic:"", note:"Recite 1 time"});
+  savePacks();
+  renderAll();
+  showToast("Dua added");
+}
+
+function updateStep(index, field, value){
+  const step = packs[activeKey].steps[index];
+  if(!step) return;
+  step[field] = field === "target" ? Math.max(1, Number(value) || 1) : value;
+  savePacks();
+  renderPacks();
+  renderPreview();
+  renderCode();
+}
+
+function deleteStep(index){
+  if(!confirm("Delete this dua step?")) return;
+  packs[activeKey].steps.splice(index,1);
+  savePacks();
+  renderAll();
+}
+
+function moveStep(index, dir){
+  const steps = packs[activeKey].steps;
+  const newIndex = index + dir;
+  if(newIndex < 0 || newIndex >= steps.length) return;
+  [steps[index], steps[newIndex]] = [steps[newIndex], steps[index]];
+  savePacks();
+  renderAll();
+}
+
+function cleanPacksForExport(){
+  const cleaned = {};
+  Object.entries(packs).forEach(([key, pack]) => {
+    const steps = Array.isArray(pack.steps) ? pack.steps.map(step => ({
+      title: String(step.title || "New Dua"),
+      target: Math.max(1, Number(step.target) || 1),
+      arabic: String(step.arabic || ""),
+      note: String(step.note || "")
+    })) : [];
+    cleaned[key] = {
+      name: String(pack.name || key),
+      desc: String(pack.desc || ""),
+      steps
+    };
+  });
+  return cleaned;
+}
+
+function downloadJSON(){
+  savePackFromInputs();
+  const exportData = cleanPacksForExport();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(exportData));
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "dhikr-packs.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast("JSON downloaded. Replace only dhikr-packs.json");
+}
+
+function copyCode(){
+  navigator.clipboard.writeText(codeBox.textContent).then(() => showToast("Code copied"));
+}
+
+function exportCode(){
+  renderCode();
+  codeBox.scrollIntoView({behavior:"smooth", block:"center"});
+  showToast("Export code is ready");
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function escapeAttr(s){return escapeHtml(s).replace(/`/g,"&#096;")}
+function showToast(msg){toast.textContent=msg;toast.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove("show"),1800)}
+
+document.getElementById("savePackBtn").onclick = savePackFromInputs;
+document.getElementById("newPackBtn").onclick = addPack;
+document.getElementById("deletePackBtn").onclick = deletePack;
+document.getElementById("addStepBtn").onclick = addStep;
+document.getElementById("downloadBtn").onclick = downloadJSON;
+document.getElementById("copyCodeBtn").onclick = copyCode;
+document.getElementById("exportBtn").onclick = exportCode;
+
+init();
 </script>
 <script>
 (function(){
