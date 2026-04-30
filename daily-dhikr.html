@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Daily Dhikr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+:root{--bg1:#ecfff8;--bg2:#eef4ff;--card:rgba(255,255,255,.86);--text:#14213d;--muted:#667085;--primary:#078b72;--primary2:#16c79a;--gold:#d9a441;--danger:#e63946;--line:rgba(7,139,114,.18);--shadow:0 22px 70px rgba(8,61,70,.18);--glass:rgba(255,255,255,.62);--btnText:#fff}
+html[data-theme='dark']{--bg1:#061b21;--bg2:#07101f;--card:rgba(13,31,39,.86);--text:#f4fffb;--muted:#a9bec4;--primary:#16c79a;--primary2:#6fffe9;--gold:#ffd166;--danger:#ff5c77;--line:rgba(111,255,233,.20);--shadow:0 22px 80px rgba(0,0,0,.42);--glass:rgba(255,255,255,.08);--btnText:#05201b}
+*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%}body{font-family:'Poppins',system-ui,sans-serif;color:var(--text);overflow-x:hidden;background:radial-gradient(circle at 20% 10%,rgba(22,199,154,.32),transparent 30%),radial-gradient(circle at 85% 18%,rgba(217,164,65,.25),transparent 28%),linear-gradient(135deg,var(--bg1),var(--bg2));padding:16px;transition:.3s background,.3s color}body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;animation:gridMove 18s linear infinite}body::after{content:"۞";position:fixed;right:-40px;top:-80px;font-family:'Amiri',serif;font-size:300px;color:var(--primary);opacity:.045;pointer-events:none;animation:float 7s ease-in-out infinite}@keyframes gridMove{to{background-position:44px 44px}}@keyframes float{50%{transform:translate(-10px,18px) rotate(6deg)}}
+.app{width:min(920px,100%);margin:auto;position:relative;z-index:1;animation:pageEnter .42s ease both}.topbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:6px 0 16px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--gold));display:grid;place-items:center;color:white;box-shadow:0 0 30px rgba(22,199,154,.4);font-size:20px}.brand h1{font-size:clamp(1.45rem,5vw,2.25rem);line-height:1.05;color:var(--primary)}.brand p{font-size:.86rem;color:var(--muted);margin-top:3px}.actions{display:flex;gap:8px;flex-wrap:wrap}button{font-family:inherit;-webkit-tap-highlight-color:transparent}.pill{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:10px 13px;border-radius:999px;cursor:pointer;backdrop-filter:blur(12px);box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s}.pill:active,.pill:hover{transform:translateY(-1px);border-color:var(--primary)}.pill.danger{color:var(--danger)}
+.page-tabs{width:100%;display:flex;gap:10px;justify-content:center;margin:2px 0 8px}.tab-link{text-decoration:none;border:1px solid var(--line);background:var(--glass);color:var(--text);padding:10px 14px;border-radius:999px;backdrop-filter:blur(12px);font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.06);position:relative;overflow:hidden;transition:.22s}.tab-link.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}
+.pack-bar{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:16px}.select-wrap{position:relative}.pack-select{width:100%;appearance:none;border:1px solid var(--line);border-radius:22px;background:var(--card);color:var(--text);padding:15px 48px 15px 16px;font:inherit;font-weight:800;box-shadow:0 12px 30px rgba(0,0,0,.07);outline:none}.select-wrap i{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--primary);pointer-events:none}.pack-badge{white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:12px 15px;background:var(--glass);color:var(--primary);font-weight:800}.card{background:var(--card);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow);backdrop-filter:blur(18px);overflow:hidden}.routine-card{padding:22px;text-align:center;position:relative}.routine-card::before{content:"";position:absolute;inset:-2px;background:radial-gradient(circle at 50% 12%,rgba(22,199,154,.20),transparent 38%);pointer-events:none}.stage{position:relative;z-index:1;min-height:330px;display:flex;flex-direction:column;justify-content:center;gap:12px;transition:.28s}.step-chip{display:inline-flex;align-items:center;gap:8px;align-self:center;background:linear-gradient(135deg,rgba(217,164,65,.22),rgba(22,199,154,.12));border:1px solid var(--line);border-radius:999px;padding:8px 13px;color:var(--primary);font-weight:800;font-size:.88rem}.dua-title{font-size:clamp(1.25rem,5vw,2rem);color:var(--text)}.arabic{font-family:'Amiri',serif;font-size:clamp(2rem,8.5vw,4.2rem);line-height:1.55;color:var(--primary);text-shadow:0 0 22px rgba(22,199,154,.20);direction:rtl}.note{color:var(--muted);font-size:.96rem;line-height:1.55}.tap-zone{width:min(172px,48vw);height:min(172px,48vw);border-radius:50%;border:0;color:var(--btnText);background:radial-gradient(circle at 35% 25%,var(--primary2),var(--primary));box-shadow:0 18px 40px rgba(22,199,154,.32),inset 0 -10px 18px rgba(0,0,0,.16);font-size:2.15rem;cursor:pointer;position:relative;overflow:hidden;margin:10px auto 2px;transition:.12s}.tap-zone:active{transform:scale(.94)}.tap-zone::after{content:"TAP";position:absolute;bottom:30px;left:0;right:0;font-size:.75rem;font-weight:800;letter-spacing:2px;opacity:.75}.counter-text{color:var(--muted);font-weight:700}.counter-text strong{color:var(--primary);font-size:1.3rem}.steps{margin-top:16px;padding:16px;display:grid;gap:10px}.step-item{border:1px solid var(--line);background:var(--glass);border-radius:18px;padding:13px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;cursor:pointer;text-align:left;color:var(--text);transition:.2s}.step-item:hover,.step-item.active{transform:translateY(-1px);border-color:var(--primary)}.step-item.active{background:linear-gradient(135deg,rgba(22,199,154,.18),rgba(217,164,65,.12))}.num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--glass);border:1px solid var(--line);font-weight:800;color:var(--primary)}.done .num{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText)}.step-name{font-weight:800}.step-sub{font-size:.82rem;color:var(--muted);margin-top:2px}.status{font-weight:800;color:var(--primary);font-size:.85rem}.complete-panel{display:none;padding:22px;text-align:center}.complete-panel.show{display:block;animation:fadeIn .35s ease}.complete-panel h2{color:var(--primary);font-size:1.7rem;margin-bottom:6px}.complete-panel p{color:var(--muted)}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:12px 18px;color:var(--text);z-index:99;transition:.3s;white-space:nowrap}.toast.show{transform:translateX(-50%) translateY(0)}.spark{position:fixed;border-radius:50%;pointer-events:none;z-index:9;background:var(--gold);animation:spark .85s ease-out forwards}@keyframes spark{to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}}@keyframes rip{to{transform:translate(-50%,-50%) scale(9);opacity:0}}@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes pageEnter{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(8px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}.fade-out{opacity:0;transform:translateY(-12px) scale(.98)}
+@media(max-width:760px){body{padding:10px}.topbar{justify-content:center;text-align:center}.brand{justify-content:center;width:100%}.actions{width:100%;justify-content:center}.page-tabs{order:3}.tab-link{font-size:.84rem;padding:9px 10px}.pack-bar{grid-template-columns:1fr}.pack-badge{text-align:center}.routine-card{padding:16px}.stage{min-height:360px}.steps{padding:12px}.step-item{grid-template-columns:auto 1fr}.status{grid-column:2}.arabic{font-size:clamp(1.85rem,10vw,3.35rem)}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Smooth page/tab transition */
+body{animation:pageFadeIn .42s ease both;}
+body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
+.app{will-change:transform,opacity;}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(16px) scale(.985);filter:blur(8px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes pageFadeOut{from{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}to{opacity:0;transform:translateY(-14px) scale(.985);filter:blur(8px)}}
+@media(prefers-reduced-motion:reduce){body,body.is-leaving{animation:none!important}}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><i class="fas fa-book-open"></i></div>
+      <div>
+        <h1>Daily Dhikr</h1>
+        <p>Choose a dhikr pack and complete it step by step</p>
+      </div>
+    </div>
+    <nav class="page-tabs">
+      <a class="tab-link" href="index.html"><i class="fas fa-kaaba"></i> 99 Names</a>
+      <a class="tab-link active" href="daily-dhikr.html"><i class="fas fa-book-open"></i> Daily Dhikr</a>
+    </nav>
+    <div class="actions">
+      <button id="reset-btn" class="pill"><i class="fas fa-redo"></i> Reset Pack</button>
+      <button id="theme-toggle" class="pill"><i class="fas fa-moon"></i> Dark Mode</button>
+    </div>
+  </header>
+
+  <section class="pack-bar">
+    <div class="select-wrap">
+      <select id="pack-select" class="pack-select" aria-label="Choose dhikr pack"></select>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="pack-badge" id="pack-badge">0 steps</div>
+  </section>
+
+  <main class="card routine-card">
+    <section id="stage" class="stage">
+      <div class="step-chip" id="step-chip"><i class="fas fa-seedling"></i> Step 1</div>
+      <h2 id="dua-title" class="dua-title"></h2>
+      <div id="arabic" class="arabic"></div>
+      <p id="note" class="note"></p>
+      <button id="tap-btn" class="tap-zone" aria-label="Complete recitation"><i class="fas fa-plus"></i></button>
+      <p id="counter-text" class="counter-text"><strong>0</strong> / 1</p>
+    </section>
+    <section id="complete-panel" class="complete-panel">
+      <h2>Pack Completed ✨</h2>
+      <p>May Allah accept your dhikr and protect you.</p>
+    </section>
+  </main>
+
+  <section class="card steps" id="steps"></section>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+const FALLBACK_PACKS_DATA = {
+  "beforeSleep": {
+    "name": "Before Sleep",
+    "desc": "3 simple bedtime duas",
+    "steps": [
+      {
+        "title": "Ayat ul Kursi",
+        "target": 1,
+        "arabic": "اللّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Astaghfirullah",
+        "target": 1,
+        "arabic": "أَسْتَغْفِرُ اللهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Allahumma Bismika",
+        "target": 1,
+        "arabic": "اللّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا",
+        "note": "Recite 1 time"
+      }
+    ]
+  },
+  "evilEye": {
+    "name": "Dua for Evil Eye",
+    "desc": "Protection pack with Durood and Surahs",
+    "steps": [
+      {
+        "title": "Durood e Pak",
+        "target": 3,
+        "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+        "note": "Recite 3 times"
+      },
+      {
+        "title": "Surah Al-Fatiha",
+        "target": 1,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ ۝ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ مَـٰلِكِ يَوْمِ ٱلدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ ۝ صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah Ikhlas",
+        "target": 1,
+        "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah An-Naas",
+        "target": 1,
+        "arabic": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah Al-Falaq",
+        "target": 1,
+        "arabic": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Dua for Evil Eye",
+        "target": 1,
+        "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ، وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Durood e Pak",
+        "target": 3,
+        "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+        "note": "Recite 3 times at the end"
+      }
+    ]
+  }
+};
+let PACKS = [];
+const PACK_ICONS = { beforeSleep: 'fa-moon', evilEye: 'fa-shield-heart' };
+
+function normalizePacks(data){
+  if(Array.isArray(data)){
+    return data.map((pack, index) => ({
+      id: pack.id || ('pack_' + (index + 1)),
+      name: pack.name || ('Pack ' + (index + 1)),
+      desc: pack.desc || '',
+      icon: pack.icon || PACK_ICONS[pack.id] || 'fa-book-open',
+      steps: Array.isArray(pack.steps) ? pack.steps : []
+    })).filter(pack => pack.steps.length);
+  }
+  if(data && typeof data === 'object'){
+    return Object.entries(data).map(([id, pack]) => ({
+      id,
+      name: pack.name || id,
+      desc: pack.desc || '',
+      icon: pack.icon || PACK_ICONS[id] || 'fa-book-open',
+      steps: Array.isArray(pack.steps) ? pack.steps : []
+    })).filter(pack => pack.steps.length);
+  }
+  return [];
+}
+
+function getAdminSavedPacks(){
+  try{
+    const saved = JSON.parse(localStorage.getItem("dailyDhikrPacksAdmin") || "null");
+    return normalizePacks(saved);
+  }catch(error){ return []; }
+}
+
+async function loadDhikrPacks(){
+  const isLocalFile = window.location.protocol === "file:";
+  if(isLocalFile){
+    PACKS = getAdminSavedPacks();
+    if(PACKS.length) return;
+  }
+  try{
+    const response = await fetch("dhikr-packs.json?v=" + Date.now(), { cache: "no-store" });
+    if(!response.ok) throw new Error("JSON file not found");
+    const data = await response.json();
+    PACKS = normalizePacks(data);
+  }catch(error){
+    console.warn("JSON loading failed, trying admin localStorage:", error);
+    PACKS = getAdminSavedPacks();
+  }
+  if(!PACKS.length){
+    PACKS = normalizePacks(FALLBACK_PACKS_DATA);
+    setTimeout(() => showToast("Using backup packs"), 300);
+  }
+}
+
+const $ = id => document.getElementById(id);
+const packSelect=$('pack-select'), packBadge=$('pack-badge'), stage=$('stage'), completePanel=$('complete-panel'), stepChip=$('step-chip'), duaTitle=$('dua-title'), arabic=$('arabic'), note=$('note'), tapBtn=$('tap-btn'), counterText=$('counter-text'), stepsBox=$('steps'), resetBtn=$('reset-btn'), themeBtn=$('theme-toggle'), toast=$('toast');
+let state = {packId:'beforeSleep', stepIndex:0, counts:{}, completed:{}, dark:false};
+async function load(){
+  await loadDhikrPacks();
+  try{
+    const saved=JSON.parse(localStorage.getItem('dailyDhikrPacks')||'null');
+    if(saved) state={...state,...saved};
+  }catch(e){}
+  if(!PACKS.find(p=>p.id===state.packId)) state.packId=PACKS[0].id;
+  renderSelect();
+  applyTheme();
+  renderAll();
+}
+function save(){localStorage.setItem('dailyDhikrPacks',JSON.stringify(state));}
+function currentPack(){return PACKS.find(p=>p.id===state.packId)||PACKS[0];}
+function key(i=state.stepIndex){return state.packId+'_'+i;}
+function renderSelect(){packSelect.innerHTML=PACKS.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); packSelect.value=state.packId;}
+function switchPack(id){state.packId=id;state.stepIndex=0;stage.classList.add('fade-out');setTimeout(()=>{stage.classList.remove('fade-out');renderAll();save();},180);}
+function renderAll(){const pack=currentPack(); const step=pack.steps[state.stepIndex]||pack.steps[0]; const count=state.counts[key()]||0; const finished=isPackComplete(); packBadge.innerHTML=`<i class="fas ${pack.icon}"></i> ${pack.steps.length} steps`; if(finished){stage.style.display='none';completePanel.classList.add('show');}else{stage.style.display='flex';completePanel.classList.remove('show');}
+stepChip.innerHTML=`<i class="fas ${pack.icon}"></i> Step ${state.stepIndex+1} of ${pack.steps.length}`; duaTitle.textContent=step.title; arabic.textContent=step.arabic; note.textContent=step.note; counterText.innerHTML=`<strong>${Math.min(count,step.target)}</strong> / ${step.target}`; renderSteps();}
+function renderSteps(){const pack=currentPack();stepsBox.innerHTML='';pack.steps.forEach((s,i)=>{const done=!!state.completed[state.packId+'_'+i];const active=i===state.stepIndex&&!isPackComplete();const btn=document.createElement('button');btn.type='button';btn.className='step-item '+(done?'done ':'')+(active?'active':'');btn.innerHTML=`<span class="num">${done?'<i class="fas fa-check"></i>':i+1}</span><span><div class="step-name">${s.title}</div><div class="step-sub">${s.target} time${s.target>1?'s':''}</div></span><span class="status">${done?'Done':'Pending'}</span>`;btn.onclick=()=>{state.stepIndex=i;renderAll();save();window.scrollTo({top:0,behavior:'smooth'});};stepsBox.appendChild(btn);});}
+function tap(e){createRipple(e); const pack=currentPack(); const step=pack.steps[state.stepIndex]; const k=key(); state.counts[k]=(state.counts[k]||0)+1; if(state.counts[k]>=step.target){state.counts[k]=step.target;state.completed[k]=true; const next=findNextPending(); if(next!==-1){state.stepIndex=next;showToast('Next dua opened ✨'); animateStage();}else{showToast('Pack completed 🤍');celebrate();}} renderAll();save();}
+function findNextPending(){const pack=currentPack();for(let i=0;i<pack.steps.length;i++){if(!state.completed[state.packId+'_'+i])return i;}return -1;}
+function isPackComplete(){const pack=currentPack();return pack.steps.every((_,i)=>state.completed[state.packId+'_'+i]);}
+function animateStage(){stage.classList.add('fade-out');setTimeout(()=>stage.classList.remove('fade-out'),200);}
+function resetPack(){const pack=currentPack();pack.steps.forEach((_,i)=>{delete state.counts[state.packId+'_'+i];delete state.completed[state.packId+'_'+i];});state.stepIndex=0;renderAll();save();showToast('Pack reset accurately');}
+function toggleTheme(){state.dark=!state.dark;applyTheme();save();}
+function applyTheme(){document.documentElement.setAttribute('data-theme',state.dark?'dark':'light');themeBtn.innerHTML=state.dark?'<i class="fas fa-sun"></i> Light Mode':'<i class="fas fa-moon"></i> Dark Mode';}
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),1800);}
+function createRipple(e){const rect=tapBtn.getBoundingClientRect();const x=((e&&e.clientX?e.clientX:rect.left+rect.width/2)-rect.left);const y=((e&&e.clientY?e.clientY:rect.top+rect.height/2)-rect.top);const s=document.createElement('span');s.style.cssText='position:absolute;left:'+x+'px;top:'+y+'px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.65);transform:translate(-50%,-50%) scale(0);animation:rip .6s ease-out forwards;pointer-events:none';tapBtn.appendChild(s);setTimeout(()=>s.remove(),650)}
+function celebrate(){const cx=window.innerWidth/2,cy=window.innerHeight*.45;for(let i=0;i<36;i++){const sp=document.createElement('i');sp.className='spark';const a=Math.random()*Math.PI*2,d=80+Math.random()*140;sp.style.left=cx+'px';sp.style.top=cy+'px';sp.style.width=sp.style.height=(5+Math.random()*7)+'px';sp.style.setProperty('--x',Math.cos(a)*d+'px');sp.style.setProperty('--y',Math.sin(a)*d+'px');document.body.appendChild(sp);setTimeout(()=>sp.remove(),900)}}
+packSelect.addEventListener('change',e=>switchPack(e.target.value));tapBtn.addEventListener('click',tap);resetBtn.addEventListener('click',resetPack);themeBtn.addEventListener('click',toggleTheme);load();
+</script>
+<script>
+(function(){document.querySelectorAll('.tab-link[href]').forEach(link=>{link.addEventListener('click',function(e){const href=this.getAttribute('href');if(!href||this.classList.contains('active'))return;e.preventDefault();document.body.classList.add('is-leaving');setTimeout(()=>{window.location.href=href},240);});});})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('a[href]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      var href = this.getAttribute('href');
+      if(!href || href.charAt(0)==='#' || href.indexOf('http')===0 || href.indexOf('mailto:')===0 || href.indexOf('tel:')===0) return;
+      if(this.classList.contains('active')) return;
+      e.preventDefault();
+      document.body.classList.add('is-leaving');
+      setTimeout(function(){ window.location.href = href; }, 260);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

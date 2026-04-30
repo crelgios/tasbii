@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Daily Dhikr Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#ecfff8;--bg2:#eef4ff;--card:rgba(255,255,255,.86);--text:#14213d;--muted:#667085;--primary:#078b72;--primary2:#16c79a;--gold:#d9a441;--danger:#e63946;--line:rgba(7,139,114,.18);--shadow:0 22px 70px rgba(8,61,70,.18);--glass:rgba(255,255,255,.58);--btnText:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Poppins',system-ui,sans-serif;color:var(--text);overflow-x:hidden;background:radial-gradient(circle at 20% 10%,rgba(22,199,154,.32),transparent 30%),radial-gradient(circle at 85% 18%,rgba(217,164,65,.25),transparent 28%),linear-gradient(135deg,var(--bg1),var(--bg2));padding:16px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;animation:gridMove 18s linear infinite}
+@keyframes gridMove{to{background-position:44px 44px}}
+.app{width:min(1120px,100%);margin:auto;position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:17px;background:linear-gradient(135deg,var(--primary),var(--gold));display:grid;place-items:center;color:white;box-shadow:0 0 30px rgba(22,199,154,.4);font-size:22px}
+h1{font-size:clamp(1.45rem,5vw,2.25rem);line-height:1;color:var(--primary)}
+.brand p{font-size:.86rem;color:var(--muted);margin-top:5px}
+.actions,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:11px 14px;border-radius:999px;cursor:pointer;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);border-color:var(--primary)}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffd166);color:#3a2a00;border-color:transparent}
+.btn.danger{color:var(--danger)}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(18px);overflow:hidden}
+.card-head{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.card-head h2{font-size:1.1rem;color:var(--primary)}
+.card-body{padding:18px}
+.field{display:grid;gap:7px;margin-bottom:13px}
+label{font-weight:800;color:var(--primary);font-size:.9rem}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:18px;padding:13px 14px;background:rgba(255,255,255,.62);color:var(--text);font:inherit;font-size:16px;outline:none}
+textarea{min-height:120px;resize:vertical;line-height:1.7}
+textarea.arabic{font-family:'Amiri',serif;font-size:1.45rem;direction:rtl;text-align:right}
+.pack-list{display:grid;gap:10px}
+.pack-item{border:1px solid var(--line);border-radius:20px;background:var(--glass);padding:13px;cursor:pointer;transition:.2s}
+.pack-item:hover,.pack-item.active{border-color:var(--primary);transform:translateY(-1px)}
+.pack-item.active{background:linear-gradient(135deg,rgba(7,139,114,.14),rgba(22,199,154,.12))}
+.pack-title{font-weight:800;color:var(--text)}
+.pack-meta{font-size:.8rem;color:var(--muted);margin-top:4px}
+.step-list{display:grid;gap:12px}
+.step{border:1px solid var(--line);background:var(--glass);border-radius:22px;padding:14px}
+.step-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.step-title{font-weight:800;color:var(--primary)}
+.step-ar{font-family:'Amiri',serif;direction:rtl;text-align:right;font-size:1.35rem;line-height:1.7;margin:8px 0;color:var(--text)}
+.step-note{color:var(--muted);font-size:.88rem}
+.small{font-size:.82rem;color:var(--muted)}
+.hidden{display:none!important}
+.preview{padding:18px;display:grid;gap:12px}
+.preview-card{text-align:center;padding:22px;border-radius:24px;background:linear-gradient(135deg,rgba(22,199,154,.12),rgba(217,164,65,.12));border:1px solid var(--line)}
+.preview-card h3{color:var(--primary);font-size:1.25rem}
+.preview-ar{font-family:'Amiri',serif;font-size:clamp(1.8rem,6vw,3.2rem);line-height:1.6;direction:rtl;margin:12px 0}
+.codebox{font-family:ui-monospace,Consolas,monospace;font-size:.82rem;line-height:1.5;background:#07101f;color:#e8fff8;border-radius:20px;padding:14px;max-height:310px;overflow:auto;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:12px 18px;color:var(--text);z-index:99;transition:.3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:860px){body{padding:10px}.grid{grid-template-columns:1fr}.topbar{justify-content:center;text-align:center}.brand{width:100%;justify-content:center}.actions{justify-content:center;width:100%}.card{border-radius:24px}.btn{font-size:.84rem;padding:10px 12px}}
+/* Smooth page/tab transition */
+body{animation:pageFadeIn .42s ease both;}
+body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
+.app{will-change:transform,opacity;}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(16px) scale(.985);filter:blur(8px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes pageFadeOut{from{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}to{opacity:0;transform:translateY(-14px) scale(.985);filter:blur(8px)}}
+@media(prefers-reduced-motion:reduce){body,body.is-leaving{animation:none!important}}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">☾</div>
+      <div>
+        <h1>Daily Dhikr Admin</h1>
+        <p>Private page to manage dua packs easily</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="index.html">← Back to Daily Dhikr</a>
+      <button class="btn primary" id="exportBtn">Export Code</button>
+      <button class="btn gold" id="downloadBtn">Download JSON</button>
+      <a class="btn primary" href="daily-dhikr.html">Open Daily Dhikr</a>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <div class="card-head">
+        <h2>Dua Packs</h2>
+        <button class="btn primary" id="newPackBtn">+ New Pack</button>
+      </div>
+      <div class="card-body">
+        <div id="packList" class="pack-list"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 id="editorTitle">Edit Pack</h2>
+        <div class="row">
+          <button class="btn danger" id="deletePackBtn">Delete Pack</button>
+          <button class="btn primary" id="savePackBtn">Save</button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label>Pack Name</label>
+          <input id="packName" placeholder="Example: Dua for Evil Eye" />
+        </div>
+        <div class="field">
+          <label>Short Description</label>
+          <input id="packDesc" placeholder="Example: Protection routine" />
+        </div>
+
+        <div class="card" style="box-shadow:none;margin:14px 0">
+          <div class="card-head">
+            <h2>Steps / Duas</h2>
+            <button class="btn primary" id="addStepBtn">+ Add Dua</button>
+          </div>
+          <div class="card-body">
+            <div id="stepList" class="step-list"></div>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none">
+          <div class="card-head">
+            <h2>Live Preview</h2>
+            <span class="small">First step preview</span>
+          </div>
+          <div id="preview" class="preview"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="card" style="margin-top:18px">
+    <div class="card-head">
+      <h2>Export for your Daily Dhikr code</h2>
+      <button class="btn" id="copyCodeBtn">Copy Code</button>
+    </div>
+    <div class="card-body">
+      <p class="small" style="margin-bottom:10px">Download JSON and replace <b>dhikr-packs.json</b> in your GitHub project. Saved changes also preview instantly in this browser.</p>
+      <div id="codeBox" class="codebox"></div>
+    </div>
+  </section>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const STORAGE_KEY = "dailyDhikrPacksAdmin";
+
+const DEFAULT_PACKS = {
+  "beforeSleep": {
+    "name": "Before Sleep",
+    "desc": "3 simple bedtime duas",
+    "steps": [
+      {
+        "title": "Ayat ul Kursi",
+        "target": 1,
+        "arabic": "اللّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Astaghfirullah",
+        "target": 1,
+        "arabic": "أَسْتَغْفِرُ اللهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Allahumma Bismika",
+        "target": 1,
+        "arabic": "اللّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا",
+        "note": "Recite 1 time"
+      }
+    ]
+  },
+  "evilEye": {
+    "name": "Dua for Evil Eye",
+    "desc": "Protection pack with Durood and Surahs",
+    "steps": [
+      {
+        "title": "Durood e Pak",
+        "target": 3,
+        "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+        "note": "Recite 3 times"
+      },
+      {
+        "title": "Surah Al-Fatiha",
+        "target": 1,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ ۝ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ مَـٰلِكِ يَوْمِ ٱلدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ ۝ صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah Ikhlas",
+        "target": 1,
+        "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah An-Naas",
+        "target": 1,
+        "arabic": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Surah Al-Falaq",
+        "target": 1,
+        "arabic": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Dua for Evil Eye",
+        "target": 1,
+        "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ، وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+        "note": "Recite 1 time"
+      },
+      {
+        "title": "Durood e Pak",
+        "target": 3,
+        "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+        "note": "Recite 3 times at the end"
+      }
+    ]
+  }
+};
+const PACK_SOURCE_URL = "dhikr-packs.json";
+
+let packs = {};
+let activeKey = "beforeSleep";
+
+const packList = document.getElementById("packList");
+const stepList = document.getElementById("stepList");
+const packName = document.getElementById("packName");
+const packDesc = document.getElementById("packDesc");
+const codeBox = document.getElementById("codeBox");
+const preview = document.getElementById("preview");
+const toast = document.getElementById("toast");
+
+function slugify(text){
+  const base = String(text || "pack").toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
+  let key = base || "pack";
+  let i = 2;
+  while(packs[key]) key = base + "_" + i++;
+  return key;
+}
+
+async function init(){
+  packs = await loadPacks();
+  activeKey = Object.keys(packs)[0] || "beforeSleep";
+  renderAll();
+}
+
+async function loadPacks(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if(saved && typeof saved === "object") return saved;
+  }catch(e){}
+  try{
+    const res = await fetch(PACK_SOURCE_URL, {cache:"no-store"});
+    if(res.ok) return await res.json();
+  }catch(e){
+    console.warn("dhikr-packs.json could not be loaded. Using default packs.", e);
+  }
+  return structuredClone(DEFAULT_PACKS);
+}
+
+function savePacks(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(packs));
+  renderCode();
+}
+
+function renderPacks(){
+  packList.innerHTML = "";
+  Object.entries(packs).forEach(([key, pack]) => {
+    const div = document.createElement("div");
+    div.className = "pack-item" + (key === activeKey ? " active" : "");
+    div.innerHTML = `
+      <div class="pack-title">${escapeHtml(pack.name || key)}</div>
+      <div class="pack-meta">${(pack.steps || []).length} steps • ${escapeHtml(pack.desc || "No description")}</div>
+    `;
+    div.onclick = () => {
+      activeKey = key;
+      renderAll();
+    };
+    packList.appendChild(div);
+  });
+}
+
+function renderEditor(){
+  const pack = packs[activeKey];
+  if(!pack) return;
+  packName.value = pack.name || "";
+  packDesc.value = pack.desc || "";
+  renderSteps();
+  renderPreview();
+}
+
+function renderSteps(){
+  const pack = packs[activeKey];
+  stepList.innerHTML = "";
+  (pack.steps || []).forEach((step, index) => {
+    const div = document.createElement("div");
+    div.className = "step";
+    div.innerHTML = `
+      <div class="step-top">
+        <div class="step-title">Step ${index + 1}: ${escapeHtml(step.title || "Untitled")}</div>
+        <div class="row">
+          <button class="btn" onclick="moveStep(${index}, -1)">↑</button>
+          <button class="btn" onclick="moveStep(${index}, 1)">↓</button>
+          <button class="btn danger" onclick="deleteStep(${index})">Delete</button>
+        </div>
+      </div>
+      <div class="field"><label>Title</label><input value="${escapeAttr(step.title || "")}" oninput="updateStep(${index}, 'title', this.value)"></div>
+      <div class="field"><label>Times</label><input type="number" min="1" value="${Number(step.target) || 1}" oninput="updateStep(${index}, 'target', this.value)"></div>
+      <div class="field"><label>Arabic / Dua Text</label><textarea class="arabic" oninput="updateStep(${index}, 'arabic', this.value)">${escapeHtml(step.arabic || "")}</textarea></div>
+      <div class="field"><label>Note</label><input value="${escapeAttr(step.note || "")}" oninput="updateStep(${index}, 'note', this.value)"></div>
+      <div class="step-ar">${escapeHtml(step.arabic || "")}</div>
+      <div class="step-note">${escapeHtml(step.note || "")}</div>
+    `;
+    stepList.appendChild(div);
+  });
+}
+
+function renderPreview(){
+  const pack = packs[activeKey];
+  const step = (pack.steps || [])[0];
+  if(!step){
+    preview.innerHTML = `<div class="preview-card"><h3>No steps yet</h3><p class="small">Add your first dua.</p></div>`;
+    return;
+  }
+  preview.innerHTML = `
+    <div class="preview-card">
+      <h3>${escapeHtml(pack.name || "Pack")}</h3>
+      <div class="small">Step 1 of ${(pack.steps || []).length} • ${Number(step.target) || 1} time(s)</div>
+      <div class="preview-ar">${escapeHtml(step.arabic || "")}</div>
+      <b>${escapeHtml(step.title || "")}</b>
+      <p class="small">${escapeHtml(step.note || "")}</p>
+    </div>
+  `;
+}
+
+function renderCode(){
+  codeBox.textContent = "const DHIKR_PACKS = " + JSON.stringify(packs, null, 2) + ";";
+}
+
+function renderAll(){
+  renderPacks();
+  renderEditor();
+  renderCode();
+}
+
+function savePackFromInputs(){
+  const pack = packs[activeKey];
+  if(!pack) return;
+  pack.name = packName.value.trim() || "Untitled Pack";
+  pack.desc = packDesc.value.trim();
+  savePacks();
+  renderAll();
+  showToast("Pack saved");
+}
+
+function addPack(){
+  const name = prompt("Pack name?");
+  if(!name) return;
+  const key = slugify(name);
+  packs[key] = {name, desc:"", steps:[]};
+  activeKey = key;
+  savePacks();
+  renderAll();
+  showToast("New pack created");
+}
+
+function deletePack(){
+  const keys = Object.keys(packs);
+  if(keys.length <= 1){
+    showToast("Keep at least one pack");
+    return;
+  }
+  if(!confirm("Delete this pack?")) return;
+  delete packs[activeKey];
+  activeKey = Object.keys(packs)[0];
+  savePacks();
+  renderAll();
+  showToast("Pack deleted");
+}
+
+function addStep(){
+  const pack = packs[activeKey];
+  pack.steps = pack.steps || [];
+  pack.steps.push({title:"New Dua", target:1, arabic:"", note:"Recite 1 time"});
+  savePacks();
+  renderAll();
+  showToast("Dua added");
+}
+
+function updateStep(index, field, value){
+  const step = packs[activeKey].steps[index];
+  if(!step) return;
+  step[field] = field === "target" ? Math.max(1, Number(value) || 1) : value;
+  savePacks();
+  renderPacks();
+  renderPreview();
+  renderCode();
+}
+
+function deleteStep(index){
+  if(!confirm("Delete this dua step?")) return;
+  packs[activeKey].steps.splice(index,1);
+  savePacks();
+  renderAll();
+}
+
+function moveStep(index, dir){
+  const steps = packs[activeKey].steps;
+  const newIndex = index + dir;
+  if(newIndex < 0 || newIndex >= steps.length) return;
+  [steps[index], steps[newIndex]] = [steps[newIndex], steps[index]];
+  savePacks();
+  renderAll();
+}
+
+function cleanPacksForExport(){
+  const cleaned = {};
+  Object.entries(packs).forEach(([key, pack]) => {
+    const steps = Array.isArray(pack.steps) ? pack.steps.map(step => ({
+      title: String(step.title || "New Dua"),
+      target: Math.max(1, Number(step.target) || 1),
+      arabic: String(step.arabic || ""),
+      note: String(step.note || "")
+    })) : [];
+    cleaned[key] = {
+      name: String(pack.name || key),
+      desc: String(pack.desc || ""),
+      steps
+    };
+  });
+  return cleaned;
+}
+
+function downloadJSON(){
+  savePackFromInputs();
+  const exportData = cleanPacksForExport();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(exportData));
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "dhikr-packs.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast("JSON downloaded. Replace only dhikr-packs.json");
+}
+
+function copyCode(){
+  navigator.clipboard.writeText(codeBox.textContent).then(() => showToast("Code copied"));
+}
+
+function exportCode(){
+  renderCode();
+  codeBox.scrollIntoView({behavior:"smooth", block:"center"});
+  showToast("Export code is ready");
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function escapeAttr(s){return escapeHtml(s).replace(/`/g,"&#096;")}
+function showToast(msg){toast.textContent=msg;toast.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove("show"),1800)}
+
+document.getElementById("savePackBtn").onclick = savePackFromInputs;
+document.getElementById("newPackBtn").onclick = addPack;
+document.getElementById("deletePackBtn").onclick = deletePack;
+document.getElementById("addStepBtn").onclick = addStep;
+document.getElementById("downloadBtn").onclick = downloadJSON;
+document.getElementById("copyCodeBtn").onclick = copyCode;
+document.getElementById("exportBtn").onclick = exportCode;
+
+init();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('a[href]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      var href = this.getAttribute('href');
+      if(!href || href.charAt(0)==='#' || href.indexOf('http')===0 || href.indexOf('mailto:')===0 || href.indexOf('tel:')===0) return;
+      if(this.classList.contains('active')) return;
+      e.preventDefault();
+      document.body.classList.add('is-leaving');
+      setTimeout(function(){ window.location.href = href; }, 260);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
