@@ -180,20 +180,30 @@ function getAdminSavedPacks(){
 }
 
 async function loadDhikrPacks(){
-  const isLocalFile = window.location.protocol === "file:";
-  if(isLocalFile){
-    PACKS = getAdminSavedPacks();
-    if(PACKS.length) return;
-  }
+  // 1) Live Vercel API data. This updates for everyone after Admin Save.
   try{
-    const response = await fetch("dhikr-packs.json?v=" + Date.now(), { cache: "no-store" });
-    if(!response.ok) throw new Error("JSON file not found");
-    const data = await response.json();
-    PACKS = normalizePacks(data);
+    const response = await fetch("/api/packs?v=" + Date.now(), { cache: "no-store" });
+    if(response.ok){
+      const data = await response.json();
+      PACKS = normalizePacks(data);
+    }
   }catch(error){
-    console.warn("JSON loading failed, trying admin localStorage:", error);
-    PACKS = getAdminSavedPacks();
+    console.warn("Live API loading failed:", error);
   }
+
+  // 2) Backup JSON file for localhost or if API is not ready.
+  if(!PACKS.length){
+    try{
+      const response = await fetch("dhikr-packs.json?v=" + Date.now(), { cache: "no-store" });
+      if(!response.ok) throw new Error("JSON file not found");
+      const data = await response.json();
+      PACKS = normalizePacks(data);
+    }catch(error){
+      console.warn("JSON loading failed:", error);
+    }
+  }
+
+  // 3) Last safety backup so page never becomes blank.
   if(!PACKS.length){
     PACKS = normalizePacks(FALLBACK_PACKS_DATA);
     setTimeout(() => showToast("Using backup packs"), 300);

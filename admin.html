@@ -68,7 +68,20 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
 
 </style>
 </head>
-<body>
+<body><script>
+(function(){
+  const ADMIN_PASSWORD = '786';
+  if (sessionStorage.getItem('adminUnlocked') === 'yes') return;
+  const pass = prompt('Enter admin password');
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('adminUnlocked', 'yes');
+  } else {
+    alert('Wrong password');
+    window.location.href = 'index.html';
+  }
+})();
+</script>
+
 <div class="app">
   <header class="topbar">
     <div class="brand">
@@ -143,7 +156,7 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
       <button class="btn" id="copyCodeBtn">Copy Code</button>
     </div>
     <div class="card-body">
-      <p class="small" style="margin-bottom:10px">Download JSON and replace <b>dhikr-packs.json</b> in your GitHub project. Saved changes also preview instantly in this browser.</p>
+      <p class="small" style="margin-bottom:10px">Click <b>Save</b> to update the live Vercel website. No JSON file replacement needed.</p>
       <div id="codeBox" class="codebox"></div>
     </div>
   </section>
@@ -228,7 +241,7 @@ const DEFAULT_PACKS = {
     ]
   }
 };
-const PACK_SOURCE_URL = "dhikr-packs.json";
+const PACK_SOURCE_URL = "/api/packs";
 
 let packs = {};
 let activeKey = "beforeSleep";
@@ -258,21 +271,55 @@ async function init(){
 
 async function loadPacks(){
   try{
+    const res = await fetch(PACK_SOURCE_URL, {cache:"no-store"});
+    if(res.ok){
+      const data = await res.json();
+      if(data && typeof data === "object") return data;
+    }
+  }catch(e){
+    console.warn("Live packs could not be loaded. Using backup packs.", e);
+  }
+  try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if(saved && typeof saved === "object") return saved;
   }catch(e){}
-  try{
-    const res = await fetch(PACK_SOURCE_URL, {cache:"no-store"});
-    if(res.ok) return await res.json();
-  }catch(e){
-    console.warn("dhikr-packs.json could not be loaded. Using default packs.", e);
-  }
   return structuredClone(DEFAULT_PACKS);
 }
 
 function savePacks(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(packs));
   renderCode();
+}
+
+async function savePacksLive(){
+  savePacks();
+  await saveLivePacks();
+}
+
+async function getAdminPassword(){
+  let password = sessionStorage.getItem("dhikrAdminPassword") || "";
+  if(!password){
+    password = prompt("Enter admin password");
+    if(!password) throw new Error("Password required");
+    sessionStorage.setItem("dhikrAdminPassword", password);
+  }
+  return password;
+}
+
+async function saveLivePacks(){
+  const password = await getAdminPassword();
+  const res = await fetch("/api/packs", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({password, packs})
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok){
+    if(res.status === 401 || res.status === 403) sessionStorage.removeItem("dhikrAdminPassword");
+    throw new Error(data.error || "Live save failed");
+  }
+  showToast("Live website updated");
+  return data;
 }
 
 function renderPacks(){
@@ -362,7 +409,7 @@ function savePackFromInputs(){
   pack.desc = packDesc.value.trim();
   savePacks();
   renderAll();
-  showToast("Pack saved");
+  showToast("Saved for preview. Download JSON to publish on GitHub.");
 }
 
 function addPack(){
@@ -453,7 +500,7 @@ function downloadJSON(){
   a.download = "dhikr-packs.json";
   a.click();
   URL.revokeObjectURL(a.href);
-  showToast("JSON downloaded. Replace only dhikr-packs.json");
+  showToast("JSON downloaded. Upload/commit this file to GitHub.");
 }
 
 function copyCode(){
