@@ -440,18 +440,26 @@ function addPack(){
   showToast("New pack created");
 }
 
-function deletePack(){
+async function deletePack(){
   const keys = Object.keys(packs);
   if(keys.length <= 1){
     showToast("Keep at least one pack");
     return;
   }
-  if(!confirm("Delete this pack?")) return;
-  delete packs[activeKey];
+  const deletingKey = activeKey;
+  if(!confirm("Delete this pack from admin and live Daily Dhikr?")) return;
+
+  delete packs[deletingKey];
   activeKey = Object.keys(packs)[0];
   savePacks();
   renderAll();
-  showToast("Pack deleted");
+
+  try{
+    await savePacksLive();
+    showToast("Pack deleted from live Daily Dhikr");
+  }catch(error){
+    showToast(error.message || "Delete saved here, live update failed");
+  }
 }
 
 function addStep(){
