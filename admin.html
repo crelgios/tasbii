@@ -69,14 +69,26 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
 </style>
 </head>
 <body><script>
-(function(){
-  const ADMIN_PASSWORD = '786';
+(async function(){
   if (sessionStorage.getItem('adminUnlocked') === 'yes') return;
   const pass = prompt('Enter admin password');
-  if (pass === ADMIN_PASSWORD) {
-    sessionStorage.setItem('adminUnlocked', 'yes');
-  } else {
-    alert('Wrong password');
+  if (!pass) { window.location.href = 'index.html'; return; }
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password: pass})
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) {
+      sessionStorage.setItem('adminUnlocked', 'yes');
+      sessionStorage.setItem('dhikrAdminPassword', pass);
+    } else {
+      alert(data.error || 'Wrong password');
+      window.location.href = 'index.html';
+    }
+  } catch (e) {
+    alert('Password check failed. Please check Vercel API deployment.');
     window.location.href = 'index.html';
   }
 })();
@@ -92,9 +104,9 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
       </div>
     </div>
     <div class="actions">
-      <a class="btn" href="index.html">← Back to Daily Dhikr</a>
+      <a class="btn" href="daily-dhikr.html">← Back to Daily Dhikr</a>
       <button class="btn primary" id="exportBtn">Export Code</button>
-      <button class="btn gold" id="downloadBtn">Download JSON</button>
+      <button class="btn gold" id="downloadBtn">Backup JSON</button>
       <a class="btn primary" href="daily-dhikr.html">Open Daily Dhikr</a>
     </div>
   </header>
@@ -115,7 +127,7 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
         <h2 id="editorTitle">Edit Pack</h2>
         <div class="row">
           <button class="btn danger" id="deletePackBtn">Delete Pack</button>
-          <button class="btn primary" id="savePackBtn">Save</button>
+          <button class="btn primary" id="savePackBtn">Save Live</button>
         </div>
       </div>
 
@@ -402,14 +414,19 @@ function renderAll(){
   renderCode();
 }
 
-function savePackFromInputs(){
+async function savePackFromInputs(){
   const pack = packs[activeKey];
   if(!pack) return;
   pack.name = packName.value.trim() || "Untitled Pack";
   pack.desc = packDesc.value.trim();
   savePacks();
   renderAll();
-  showToast("Saved for preview. Download JSON to publish on GitHub.");
+  try{
+    await savePacksLive();
+    showToast("Live website updated. Open Daily Dhikr to check.");
+  }catch(error){
+    showToast(error.message || "Live save failed");
+  }
 }
 
 function addPack(){
@@ -491,7 +508,8 @@ function cleanPacksForExport(){
 }
 
 function downloadJSON(){
-  savePackFromInputs();
+  const pack = packs[activeKey];
+  if(pack){ pack.name = packName.value.trim() || "Untitled Pack"; pack.desc = packDesc.value.trim(); savePacks(); }
   const exportData = cleanPacksForExport();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(exportData));
   const blob = new Blob([JSON.stringify(exportData, null, 2)], {type:"application/json"});
@@ -500,7 +518,7 @@ function downloadJSON(){
   a.download = "dhikr-packs.json";
   a.click();
   URL.revokeObjectURL(a.href);
-  showToast("JSON downloaded. Upload/commit this file to GitHub.");
+  showToast("Backup JSON downloaded");
 }
 
 function copyCode(){
