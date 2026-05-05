@@ -21,6 +21,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;b
 h1{font-size:clamp(1.45rem,5vw,2.25rem);line-height:1;color:var(--primary)}
 .brand p{font-size:.86rem;color:var(--muted);margin-top:5px}
 .actions,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.admin-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:4px 0 18px}.admin-tab{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s}.admin-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}.admin-panel{display:none;animation:adminPanelIn .25s ease both}.admin-panel.active{display:block}@keyframes adminPanelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .btn{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:11px 14px;border-radius:999px;cursor:pointer;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .btn:hover{transform:translateY(-1px);border-color:var(--primary)}
 .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}
@@ -112,6 +113,12 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
     </div>
   </header>
 
+  <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+    <button type="button" class="admin-tab active" id="dailyAdminTab">Daily Dhikr</button>
+    <button type="button" class="admin-tab" id="myDuaAdminTab">My Dua</button>
+  </div>
+
+  <section class="admin-panel active" id="dailyAdminPanel">
   <main class="grid">
     <section class="card">
       <div class="card-head">
@@ -163,7 +170,20 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
     </section>
   </main>
 
+  <section class="card" style="margin-top:18px">
+    <div class="card-head">
+      <h2>Export for your Daily Dhikr code</h2>
+      <button class="btn" id="copyCodeBtn">Copy Code</button>
+    </div>
+    <div class="card-body">
+      <p class="small" style="margin-bottom:10px">Click <b>Save Live</b> to update the live Vercel website. Backup JSON is only for safety.</p>
+      <div id="codeBox" class="codebox"></div>
+    </div>
+  </section>
 
+  </section>
+
+  <section class="admin-panel" id="myDuaAdminPanel">
   <div class="admin-title">
     <h2>My Dua Counter Admin</h2>
     <span class="small">Same editor style as Daily Dhikr • Shows on My Dua tab</span>
@@ -220,17 +240,8 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
       </div>
     </section>
   </main>
-
-  <section class="card" style="margin-top:18px">
-    <div class="card-head">
-      <h2>Export for your Daily Dhikr code</h2>
-      <button class="btn" id="copyCodeBtn">Copy Code</button>
-    </div>
-    <div class="card-body">
-      <p class="small" style="margin-bottom:10px">Click <b>Save</b> to update the live Vercel website. No JSON file replacement needed.</p>
-      <div id="codeBox" class="codebox"></div>
-    </div>
   </section>
+
 </div>
 
 <div id="toast" class="toast"></div>
@@ -582,11 +593,11 @@ async function loadCounterDuas(){
   ];
 }
 
-function renderCounterDuas(){
+function renderCounterDuas(updateEditor = true){
   if(!counterDuaList) return;
   counterDuaList.innerHTML = "";
   if(!counterDuas.length){
-    counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
+    counterDuas.push({id:"dua_" + Date.now(), title:"", arabic:"", meaning:"", limit:100, note:""});
   }
   if(activeCounterIndex < 0 || activeCounterIndex >= counterDuas.length) activeCounterIndex = 0;
 
@@ -604,7 +615,7 @@ function renderCounterDuas(){
     };
     counterDuaList.appendChild(div);
   });
-  renderCounterEditor();
+  if(updateEditor) renderCounterEditor();
 }
 
 function renderCounterEditor(){
@@ -638,17 +649,17 @@ function renderCounterPreview(){
 function syncCounterEditor(){
   const dua = counterDuas[activeCounterIndex];
   if(!dua) return;
-  dua.title = counterTitle.value.trim() || "Untitled Dua";
+  dua.title = counterTitle.value;
   dua.arabic = counterArabic.value;
-  dua.meaning = counterMeaning.value.trim();
+  dua.meaning = counterMeaning.value;
   dua.limit = Math.max(1, Number(counterLimit && counterLimit.value) || Number(dua.limit) || 100);
-  dua.note = counterNote.value.trim() || ("Recite " + dua.limit + " times");
-  dua.id = dua.id || slugify(dua.title);
+  dua.note = counterNote.value;
+  dua.id = dua.id || ("dua_" + Date.now());
 }
 
 function addCounterDua(){
   syncCounterEditor();
-  counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
+  counterDuas.push({id:"dua_" + Date.now(), title:"", arabic:"", meaning:"", limit:100, note:""});
   activeCounterIndex = counterDuas.length - 1;
   renderCounterDuas();
   showToast("Counter dua added");
@@ -668,6 +679,17 @@ async function deleteCounterDua(){
   }
 }
 
+function cleanCounterDuasForSave(){
+  return counterDuas.map((dua, index) => ({
+    id: dua.id || ("dua_" + Date.now() + "_" + index),
+    title: String(dua.title || "Untitled Dua"),
+    arabic: String(dua.arabic || ""),
+    meaning: String(dua.meaning || ""),
+    limit: Math.max(1, Number(dua.limit) || 100),
+    note: String(dua.note || ("Recite " + (Math.max(1, Number(dua.limit) || 100)) + " times"))
+  }));
+}
+
 async function saveCounterDuasLive(){
   try{
     if(counterDuas[activeCounterIndex]) syncCounterEditor();
@@ -676,7 +698,7 @@ async function saveCounterDuasLive(){
     const res = await fetch(COUNTER_DUAS_URL, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({password, duas: counterDuas})
+      body: JSON.stringify({password, duas: cleanCounterDuasForSave()})
     });
     const data = await res.json().catch(()=>({}));
     if(!res.ok){
@@ -748,7 +770,20 @@ document.getElementById("exportBtn").onclick = exportCode;
 document.getElementById("addCounterDuaBtn").onclick = addCounterDua;
 document.getElementById("deleteCounterDuaBtn").onclick = deleteCounterDua;
 document.getElementById("saveCounterDuasBtn").onclick = saveCounterDuasLive;
-[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(); renderCounterPreview(); }); });
+[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(false); renderCounterPreview(); }); });
+
+function switchAdminPanel(panel){
+  const dailyActive = panel === "daily";
+  document.getElementById("dailyAdminTab").classList.toggle("active", dailyActive);
+  document.getElementById("myDuaAdminTab").classList.toggle("active", !dailyActive);
+  document.getElementById("dailyAdminPanel").classList.toggle("active", dailyActive);
+  document.getElementById("myDuaAdminPanel").classList.toggle("active", !dailyActive);
+  localStorage.setItem("adminActivePanel", panel);
+}
+document.getElementById("dailyAdminTab").onclick = () => switchAdminPanel("daily");
+document.getElementById("myDuaAdminTab").onclick = () => switchAdminPanel("mydua");
+const savedAdminPanel = localStorage.getItem("adminActivePanel");
+if(savedAdminPanel === "mydua") switchAdminPanel("mydua");
 
 init();
 </script>
