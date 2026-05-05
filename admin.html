@@ -107,6 +107,7 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
       <button class="btn primary" id="exportBtn">Export Code</button>
       <button class="btn gold" id="downloadBtn">Backup JSON</button>
       <a class="btn primary" href="daily-dhikr.html">Open Daily Dhikr</a>
+      <a class="btn primary" href="dua-counter.html">Open My Dua</a>
     </div>
   </header>
 
@@ -160,6 +161,21 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
       </div>
     </section>
   </main>
+
+
+  <section class="card" style="margin-top:18px">
+    <div class="card-head">
+      <h2>My Dua Counter Page</h2>
+      <div class="row">
+        <button class="btn primary" id="addCounterDuaBtn">+ Add Counter Dua</button>
+        <button class="btn primary" id="saveCounterDuasBtn">Save Counter Duas Live</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="small" style="margin-bottom:12px">These duas show on <b>My Dua Counter</b>. Each dua can be recited 100 times with the 99 Names style UI.</p>
+      <div id="counterDuaList" class="step-list"></div>
+    </div>
+  </section>
 
   <section class="card" style="margin-top:18px">
     <div class="card-head">
@@ -253,9 +269,11 @@ const DEFAULT_PACKS = {
   }
 };
 const PACK_SOURCE_URL = "/api/packs";
+const COUNTER_DUAS_URL = "/api/counter-duas";
 
 let packs = {};
 let activeKey = "beforeSleep";
+let counterDuas = [];
 
 const packList = document.getElementById("packList");
 const stepList = document.getElementById("stepList");
@@ -264,6 +282,7 @@ const packDesc = document.getElementById("packDesc");
 const codeBox = document.getElementById("codeBox");
 const preview = document.getElementById("preview");
 const toast = document.getElementById("toast");
+const counterDuaList = document.getElementById("counterDuaList");
 
 function slugify(text){
   const base = String(text || "pack").toLowerCase().trim()
@@ -276,8 +295,10 @@ function slugify(text){
 
 async function init(){
   packs = await loadPacks();
+  counterDuas = await loadCounterDuas();
   activeKey = Object.keys(packs)[0] || "beforeSleep";
   renderAll();
+  renderCounterDuas();
 }
 
 async function loadPacks(){
@@ -496,6 +517,93 @@ function moveStep(index, dir){
   renderAll();
 }
 
+
+async function loadCounterDuas(){
+  try{
+    const res = await fetch(COUNTER_DUAS_URL, {cache:"no-store"});
+    if(res.ok){
+      const data = await res.json();
+      if(Array.isArray(data)) return data;
+    }
+  }catch(e){ console.warn("Counter duas could not be loaded", e); }
+  return [
+    {id:"durood_shareef", title:"Durood Shareef", arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ", meaning:"Send blessings upon Prophet Muhammad ﷺ", note:"Recite 100 times"}
+  ];
+}
+
+function renderCounterDuas(){
+  if(!counterDuaList) return;
+  counterDuaList.innerHTML = "";
+  counterDuas.forEach((dua,index)=>{
+    const div = document.createElement("div");
+    div.className = "step";
+    div.innerHTML = `
+      <div class="step-top">
+        <div class="step-title">Counter Dua ${index + 1}: ${escapeHtml(dua.title || "Untitled Dua")}</div>
+        <div class="row">
+          <button class="btn" onclick="moveCounterDua(${index}, -1)">↑</button>
+          <button class="btn" onclick="moveCounterDua(${index}, 1)">↓</button>
+          <button class="btn danger" onclick="deleteCounterDua(${index})">Delete</button>
+        </div>
+      </div>
+      <div class="field"><label>Dua Title</label><input value="${escapeAttr(dua.title || "")}" oninput="updateCounterDua(${index}, 'title', this.value)"></div>
+      <div class="field"><label>Arabic / Dua Text</label><textarea class="arabic" oninput="updateCounterDua(${index}, 'arabic', this.value)">${escapeHtml(dua.arabic || "")}</textarea></div>
+      <div class="field"><label>Meaning</label><input value="${escapeAttr(dua.meaning || "")}" oninput="updateCounterDua(${index}, 'meaning', this.value)"></div>
+      <div class="field"><label>Note</label><input value="${escapeAttr(dua.note || "Recite 100 times")}" oninput="updateCounterDua(${index}, 'note', this.value)"></div>
+      <div class="step-ar">${escapeHtml(dua.arabic || "")}</div>
+      <div class="step-note">${escapeHtml(dua.meaning || dua.note || "")}</div>
+    `;
+    counterDuaList.appendChild(div);
+  });
+}
+
+function addCounterDua(){
+  counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", note:"Recite 100 times"});
+  renderCounterDuas();
+  showToast("Counter dua added");
+}
+
+function updateCounterDua(index, field, value){
+  if(!counterDuas[index]) return;
+  counterDuas[index][field] = value;
+  if(field === "title") counterDuas[index].id = slugify(value);
+}
+
+function deleteCounterDua(index){
+  if(counterDuas.length <= 1){ showToast("Keep at least one counter dua"); return; }
+  if(!confirm("Delete this counter dua?")) return;
+  counterDuas.splice(index,1);
+  renderCounterDuas();
+}
+
+function moveCounterDua(index, dir){
+  const newIndex = index + dir;
+  if(newIndex < 0 || newIndex >= counterDuas.length) return;
+  [counterDuas[index], counterDuas[newIndex]] = [counterDuas[newIndex], counterDuas[index]];
+  renderCounterDuas();
+}
+
+async function saveCounterDuasLive(){
+  try{
+    const password = await getAdminPassword();
+    const res = await fetch(COUNTER_DUAS_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({password, duas: counterDuas})
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok){
+      if(res.status === 401 || res.status === 403) sessionStorage.removeItem("dhikrAdminPassword");
+      throw new Error(data.error || "Counter duas save failed");
+    }
+    counterDuas = data.duas || counterDuas;
+    renderCounterDuas();
+    showToast("My Dua Counter updated live");
+  }catch(err){
+    alert(err.message || "Save failed");
+  }
+}
+
 function cleanPacksForExport(){
   const cleaned = {};
   Object.entries(packs).forEach(([key, pack]) => {
@@ -549,6 +657,8 @@ document.getElementById("addStepBtn").onclick = addStep;
 document.getElementById("downloadBtn").onclick = downloadJSON;
 document.getElementById("copyCodeBtn").onclick = copyCode;
 document.getElementById("exportBtn").onclick = exportCode;
+document.getElementById("addCounterDuaBtn").onclick = addCounterDua;
+document.getElementById("saveCounterDuasBtn").onclick = saveCounterDuasLive;
 
 init();
 </script>
