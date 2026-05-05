@@ -24,7 +24,8 @@ function validateDuas(input){
       title: String(d.title || `Dua ${i+1}`).slice(0,160),
       arabic: String(d.arabic || "").slice(0,5000),
       meaning: String(d.meaning || "").slice(0,300),
-      note: String(d.note || "Recite 100 times").slice(0,300)
+      limit: Math.max(1, Number(d.limit) || 100),
+      note: String(d.note || ("Recite " + (Math.max(1, Number(d.limit) || 100)) + " times")).slice(0,300)
     };
   });
 }

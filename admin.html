@@ -202,6 +202,10 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
           <input id="counterMeaning" placeholder="Example: Send blessings upon Prophet Muhammad ﷺ" />
         </div>
         <div class="field">
+          <label>Recitation Limit</label>
+          <input id="counterLimit" type="number" min="1" step="1" placeholder="Example: 100 or 313" />
+        </div>
+        <div class="field">
           <label>Note</label>
           <input id="counterNote" placeholder="Example: Recite 100 times" />
         </div>
@@ -327,6 +331,7 @@ const counterDuaList = document.getElementById("counterDuaList");
 const counterTitle = document.getElementById("counterTitle");
 const counterArabic = document.getElementById("counterArabic");
 const counterMeaning = document.getElementById("counterMeaning");
+const counterLimit = document.getElementById("counterLimit");
 const counterNote = document.getElementById("counterNote");
 const counterPreview = document.getElementById("counterPreview");
 
@@ -573,7 +578,7 @@ async function loadCounterDuas(){
     }
   }catch(e){ console.warn("Counter duas could not be loaded", e); }
   return [
-    {id:"durood_shareef", title:"Durood Shareef", arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ", meaning:"Send blessings upon Prophet Muhammad ﷺ", note:"Recite 100 times"}
+    {id:"durood_shareef", title:"Durood Shareef", arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ", meaning:"Send blessings upon Prophet Muhammad ﷺ", limit:100, note:"Recite 100 times"}
   ];
 }
 
@@ -581,7 +586,7 @@ function renderCounterDuas(){
   if(!counterDuaList) return;
   counterDuaList.innerHTML = "";
   if(!counterDuas.length){
-    counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", note:"Recite 100 times"});
+    counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
   }
   if(activeCounterIndex < 0 || activeCounterIndex >= counterDuas.length) activeCounterIndex = 0;
 
@@ -590,7 +595,7 @@ function renderCounterDuas(){
     div.className = "pack-item" + (index === activeCounterIndex ? " active" : "");
     div.innerHTML = `
       <div class="pack-title">${escapeHtml(dua.title || "Untitled Dua")}</div>
-      <div class="pack-meta">100 recitations • ${escapeHtml(dua.meaning || dua.note || "No meaning added")}</div>
+      <div class="pack-meta">${Number(dua.limit) || 100} recitations • ${escapeHtml(dua.meaning || dua.note || "No meaning added")}</div>
     `;
     div.onclick = () => {
       activeCounterIndex = index;
@@ -608,7 +613,8 @@ function renderCounterEditor(){
   counterTitle.value = dua.title || "";
   counterArabic.value = dua.arabic || "";
   counterMeaning.value = dua.meaning || "";
-  counterNote.value = dua.note || "Recite 100 times";
+  if(counterLimit) counterLimit.value = Number(dua.limit) || 100;
+  counterNote.value = dua.note || ("Recite " + (Number(dua.limit) || 100) + " times");
   renderCounterPreview();
 }
 
@@ -621,7 +627,7 @@ function renderCounterPreview(){
   counterPreview.innerHTML = `
     <div class="preview-card">
       <h3>${escapeHtml(dua.title || "Untitled Dua")}</h3>
-      <div class="small">100 recitations</div>
+      <div class="small">${Number(dua.limit) || 100} recitations</div>
       <div class="preview-ar">${escapeHtml(dua.arabic || "")}</div>
       <b>${escapeHtml(dua.meaning || "")}</b>
       <p class="small">${escapeHtml(dua.note || "Recite 100 times")}</p>
@@ -635,30 +641,36 @@ function syncCounterEditor(){
   dua.title = counterTitle.value.trim() || "Untitled Dua";
   dua.arabic = counterArabic.value;
   dua.meaning = counterMeaning.value.trim();
-  dua.note = counterNote.value.trim() || "Recite 100 times";
+  dua.limit = Math.max(1, Number(counterLimit && counterLimit.value) || Number(dua.limit) || 100);
+  dua.note = counterNote.value.trim() || ("Recite " + dua.limit + " times");
   dua.id = dua.id || slugify(dua.title);
 }
 
 function addCounterDua(){
   syncCounterEditor();
-  counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", note:"Recite 100 times"});
+  counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
   activeCounterIndex = counterDuas.length - 1;
   renderCounterDuas();
   showToast("Counter dua added");
 }
 
-function deleteCounterDua(){
+async function deleteCounterDua(){
   if(counterDuas.length <= 1){ showToast("Keep at least one counter dua"); return; }
-  if(!confirm("Delete this counter dua?")) return;
+  if(!confirm("Delete this counter dua from admin and live My Dua page?")) return;
   counterDuas.splice(activeCounterIndex,1);
   activeCounterIndex = Math.max(0, activeCounterIndex - 1);
   renderCounterDuas();
-  showToast("Counter dua deleted. Click Save Live to update website.");
+  try{
+    await saveCounterDuasLive();
+    showToast("Counter dua deleted from live website");
+  }catch(error){
+    showToast(error.message || "Delete saved here, live update failed");
+  }
 }
 
 async function saveCounterDuasLive(){
   try{
-    syncCounterEditor();
+    if(counterDuas[activeCounterIndex]) syncCounterEditor();
     renderCounterDuas();
     const password = await getAdminPassword();
     const res = await fetch(COUNTER_DUAS_URL, {
@@ -736,7 +748,7 @@ document.getElementById("exportBtn").onclick = exportCode;
 document.getElementById("addCounterDuaBtn").onclick = addCounterDua;
 document.getElementById("deleteCounterDuaBtn").onclick = deleteCounterDua;
 document.getElementById("saveCounterDuasBtn").onclick = saveCounterDuasLive;
-[counterTitle,counterArabic,counterMeaning,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(); renderCounterPreview(); }); });
+[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(); renderCounterPreview(); }); });
 
 init();
 </script>

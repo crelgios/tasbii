@@ -4,13 +4,15 @@
     "title": "Durood Shareef",
     "arabic": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ",
     "meaning": "Send blessings upon Prophet Muhammad ﷺ",
-    "note": "Recite 100 times"
+    "note": "Recite 100 times",
+    "limit": 100
   },
   {
     "id": "astaghfirullah",
     "title": "Astaghfirullah",
     "arabic": "أَسْتَغْفِرُ اللهَ",
     "meaning": "I seek forgiveness from Allah",
-    "note": "Recite 100 times"
+    "note": "Recite 100 times",
+    "limit": 100
   }
 ]
