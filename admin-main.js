@@ -334,10 +334,14 @@ function moveStep(index, dir){
 
 async function loadCounterDuas(){
   try{
-    const res = await fetch(COUNTER_DUAS_URL, {cache:"no-store"});
+    const res = await fetch(COUNTER_DUAS_URL + "?v=" + Date.now(), {
+      cache:"no-store",
+      headers:{"Cache-Control":"no-cache","Pragma":"no-cache"}
+    });
     if(res.ok){
       const data = await res.json();
-      if(Array.isArray(data)) return data;
+      const list = Array.isArray(data) ? data : (Array.isArray(data.duas) ? data.duas : []);
+      if(list.length) return list;
     }
   }catch(e){ console.warn("Counter duas could not be loaded", e); }
   return [
