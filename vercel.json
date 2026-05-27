@@ -3,6 +3,22 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/daily-dhikr",
+      "destination": "/daily-dhikr.html"
+    },
+    {
+      "source": "/dua-counter",
+      "destination": "/dua-counter.html"
+    },
+    {
       "source": "/secure-aliwvide-control-9xq2m",
       "destination": "/secure-aliwvide-control-9xq2m.html"
     },
@@ -15,13 +31,19 @@
     {
       "source": "/secure-aliwvide-control-9xq2m",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     },
     {
       "source": "/secure-aliwvide-control-9xq2m.html",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
       ]
     }
   ]

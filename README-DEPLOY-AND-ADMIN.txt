@@ -75,3 +75,9 @@ Open these URLs after redeploying:
 
 If /api/counter-duas says source: "blob-merged", your Vercel Blob data is being read.
 If it says source: "fallback", your BLOB_READ_WRITE_TOKEN is missing/wrong or connected to an empty Blob store.
+
+
+BACK BUTTON FIX
+- This version includes a browser/app back-button visibility fix.
+- It removes the old page-transition state when a page is restored from browser cache.
+- It also adds explicit Vercel rewrites for /, /index, /daily-dhikr, and /dua-counter.

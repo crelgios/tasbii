@@ -804,5 +804,28 @@ init();
 })();
 </script>
 
+
+<script>
+/* Fix browser/app back button blank page caused by cached page-transition state. */
+(function(){
+  function restoreVisiblePage(){
+    if(!document.body) return;
+    document.body.classList.remove('is-leaving');
+    document.body.style.pointerEvents = '';
+    document.body.style.opacity = '';
+    document.body.style.filter = '';
+    document.body.style.transform = '';
+    document.body.style.animation = 'none';
+    void document.body.offsetHeight;
+    document.body.style.animation = '';
+  }
+  window.addEventListener('pageshow', restoreVisiblePage);
+  window.addEventListener('focus', restoreVisiblePage);
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) restoreVisiblePage();
+  });
+})();
+</script>
+
 </body>
 </html>
