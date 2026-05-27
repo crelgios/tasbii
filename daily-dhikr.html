@@ -64,10 +64,10 @@ html,body{max-width:100%;overflow-x:hidden;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tasbii">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="/assets/icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 </head>
 <body>
 <div class="app">
@@ -238,7 +238,7 @@ async function loadDhikrPacks(){
   // 2) Backup JSON file for localhost or if API is not ready.
   if(!PACKS.length){
     try{
-      const response = await fetch("dhikr-packs.json?v=" + Date.now(), { cache: "no-store" });
+      const response = await fetch("/data/dhikr-packs.json?v=" + Date.now(), { cache: "no-store" });
       if(!response.ok) throw new Error("JSON file not found");
       const data = await response.json();
       PACKS = normalizePacks(data);

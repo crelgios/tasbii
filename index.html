@@ -54,10 +54,10 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tasbii">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="/assets/icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 </head>
 <body>
 <div class="app"><header class="topbar"><div class="brand"><div class="logo"><i class="fas fa-mosque"></i></div><div><h1>Tasbeeh Counter</h1><p>99 Names of Allah • saved automatically</p></div></div><div class="actions"><a href="daily-dhikr.html" class="pill"><i class="fas fa-book-open"></i> Daily Dhikr</a><a href="dua-counter.html" class="pill"><i class="fas fa-hand-holding-heart"></i> My Dua</a><button id="reset-btn" class="pill"><i class="fas fa-redo"></i> Reset Current</button><button id="reset-all-btn" class="pill danger"><i class="fas fa-trash"></i> Reset All</button><button id="theme-toggle" class="pill"><i class="fas fa-moon"></i> Dark Mode</button></div></header><section class="quick-select-section" aria-label="Choose Name of Allah"><div class="premium-select-label"><i class="fas fa-mosque"></i><span>Choose Name of Allah</span></div><div class="select-wrap"><select id="search" class="premium-select" aria-label="Choose Name of Allah"></select><i class="fas fa-chevron-down select-arrow"></i></div><div id="names-container" class="names-grid" style="display:none"></div></section><main class="hero"><section class="card counter-card"><div class="name-display"><h2 id="name-arabic" class="arabic-text"></h2><p id="name-english" class="transliteration"></p><p id="name-meaning" class="meaning"></p></div><div class="counter-ring" id="counter-ring"><h3 id="counter" class="counter-number">0</h3></div><p class="progress-text" id="progress-text">0 / 100 recitations</p><button id="count-btn" class="count-button" aria-label="Add count"><i class="fas fa-plus"></i></button></section><aside class="card stats"><div class="stat"><span>Current Name</span><strong id="current-stat">1/99</strong></div><div class="stat"><span>Total Recitations</span><strong id="total-stat">0</strong></div><div class="stat"><span>Completed Names</span><strong id="complete-stat">0</strong></div><div class="quote">“Remember Allah with a sincere heart.”</div></aside></main><footer>May your remembrance be accepted</footer></div><div id="toast" class="toast"></div>

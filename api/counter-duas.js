@@ -68,7 +68,7 @@ function mergeDuaLists(lists){
 }
 
 function readFallbackFile(){
-  try{return JSON.parse(fs.readFileSync(path.join(process.cwd(),'counter-duas.json'),'utf8'));}
+  try{return JSON.parse(fs.readFileSync(path.join(process.cwd(),'data','counter-duas.json'),'utf8'));}
   catch(e){return [];} 
 }
 

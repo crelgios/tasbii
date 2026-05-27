@@ -93,10 +93,10 @@ body:not(.admin-locked) .admin-login{display:none!important}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tasbii">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="/assets/icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 </head>
 <body class="admin-locked">
 <div id="adminLogin" class="admin-login">
@@ -767,48 +767,6 @@ async function saveCounterDuasLive(){
   }finally{
     setSavingState("saveCounterDuasBtn", false);
   }
-}
-
-function cleanPacksForExport(){
-  const cleaned = {};
-  Object.entries(packs).forEach(([key, pack]) => {
-    const steps = Array.isArray(pack.steps) ? pack.steps.map(step => ({
-      title: String(step.title || "New Dua"),
-      target: Math.max(1, Number(step.target) || 1),
-      arabic: String(step.arabic || ""),
-      note: String(step.note || "")
-    })) : [];
-    cleaned[key] = {
-      name: String(pack.name || key),
-      desc: String(pack.desc || ""),
-      steps
-    };
-  });
-  return cleaned;
-}
-
-function downloadJSON(){
-  const pack = packs[activeKey];
-  if(pack){ pack.name = packName.value.trim() || "Untitled Pack"; pack.desc = packDesc.value.trim(); savePacks(); }
-  const exportData = cleanPacksForExport();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(exportData));
-  const blob = new Blob([JSON.stringify(exportData, null, 2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "dhikr-packs.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
-  showToast("Backup JSON downloaded");
-}
-
-function copyCode(){
-  navigator.clipboard.writeText(codeBox.textContent).then(() => showToast("Code copied"));
-}
-
-function exportCode(){
-  renderCode();
-  codeBox.scrollIntoView({behavior:"smooth", block:"center"});
-  showToast("Export code is ready");
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}

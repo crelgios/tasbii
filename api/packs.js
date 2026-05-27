@@ -80,7 +80,7 @@ function mergePacks(list){
 
 function readFallbackFile() {
   try {
-    const filePath = path.join(process.cwd(), 'dhikr-packs.json');
+    const filePath = path.join(process.cwd(), 'data', 'dhikr-packs.json');
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
   } catch (e) {
     return {};

@@ -1,0 +1,20 @@
+Tasbii project folder structure
+
+Root files kept at project root because Vercel/browser routing needs them:
+- index.html
+- daily-dhikr.html
+- dua-counter.html
+- tasbii-private-admin.html
+- api/
+- vercel.json
+- package.json
+- site.webmanifest
+- sw.js
+- .env.example
+
+Organized folders:
+- assets/icons/  Home screen icons, favicon, Apple touch icon, Android/PWA icons
+- data/          Backup/fallback JSON data used when Blob is unavailable
+- docs/          Setup notes and deployment guides
+
+Do not move api/, vercel.json, package.json, site.webmanifest, or sw.js unless routes/references are updated again.
