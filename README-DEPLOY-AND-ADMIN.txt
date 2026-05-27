@@ -54,3 +54,24 @@ HOW TO ADD A NEW DAILY DHIKR TAB/DUA
 6. Fill title, target count, Arabic text, and note.
 7. Click Save Live.
 8. Open /daily-dhikr.html and refresh.
+
+LATEST FIXES IN THIS ZIP
+------------------------
+1. Premium dropdown moved near the top on:
+   - index.html (99 Names)
+   - dua-counter.html (My Dua Tasbih)
+   Daily Dhikr was not changed because it already had the premium dropdown.
+
+2. Vercel Blob reading is now recovery-friendly:
+   - It reads old same-name Blob files like counter-duas.json and dhikr-packs.json.
+   - It also reads newer live files like counter-duas-live-*.json and dhikr-packs-live-*.json.
+   - It merges older and newer entries, so manually added duas from the old Blob file can appear again.
+
+IMPORTANT AFTER DEPLOY
+----------------------
+Open these URLs after redeploying:
+/api/counter-duas
+/api/packs
+
+If /api/counter-duas says source: "blob-merged", your Vercel Blob data is being read.
+If it says source: "fallback", your BLOB_READ_WRITE_TOKEN is missing/wrong or connected to an empty Blob store.

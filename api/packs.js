@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { readLatestJson, writeUniqueJson, requireBlobToken } = require('./_blob');
+const { readAllJson, writeUniqueJson, requireBlobToken } = require('./_blob');
 
 const LEGACY_FILE = 'dhikr-packs.json';
 const LIVE_PREFIX = 'dhikr-packs-live-';
@@ -24,6 +24,7 @@ function normalizePacks(data) {
       steps: Array.isArray(p.steps) ? p.steps : []
     }]));
   }
+  if (data && data.packs && typeof data.packs === 'object') return data.packs;
   if (data && typeof data === 'object') return data;
   return {};
 }
@@ -42,12 +43,23 @@ function validatePacks(packs) {
     pack.steps = Array.isArray(pack.steps) ? pack.steps : [];
     pack.steps = pack.steps.map((step) => ({
       title: String(step.title || 'Untitled Dua').slice(0, 160),
-      target: Math.max(1, Math.min(10000, Number(step.target) || 1)),
-      arabic: String(step.arabic || '').slice(0, 5000),
-      note: String(step.note || '').slice(0, 300)
+      target: Math.max(1, Math.min(10000, Number(step.target || step.limit || step.count) || 1)),
+      arabic: String(step.arabic || step.text || '').slice(0, 5000),
+      note: String(step.note || step.meaning || '').slice(0, 300)
     }));
   }
   return obj;
+}
+
+function mergePacks(list){
+  const out = {};
+  for (const data of list.reverse()) {
+    const packs = validatePacks(data);
+    for (const [key, pack] of Object.entries(packs)) {
+      out[key] = { ...(out[key] || {}), ...pack };
+    }
+  }
+  return out;
 }
 
 function readFallbackFile() {
@@ -60,8 +72,9 @@ function readFallbackFile() {
 }
 
 async function readBlobPacks() {
-  const data = await readLatestJson({ livePrefix: LIVE_PREFIX, legacyFile: LEGACY_FILE, label: 'dhikr packs' });
-  return data ? validatePacks(data) : null;
+  const versions = await readAllJson({ livePrefix: LIVE_PREFIX, legacyFile: LEGACY_FILE, label: 'dhikr packs' });
+  if (!versions.length) return null;
+  return mergePacks(versions.map(v => v.data));
 }
 
 module.exports = async function handler(req, res) {

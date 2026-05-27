@@ -19,32 +19,56 @@ async function fetchJsonNoCache(url, label) {
   return await response.json();
 }
 
-async function getLatestBlobUrl({ livePrefix, legacyFile }) {
+async function getBlobJsonCandidates({ livePrefix, legacyFile }) {
   requireBlobToken();
+  const files = [];
+  const seen = new Set();
 
-  if (livePrefix) {
-    const live = await list({ prefix: livePrefix, limit: 100 });
-    const liveFiles = (live.blobs || [])
-      .filter((blob) => blob.pathname && blob.pathname.startsWith(livePrefix))
-      .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0));
-    if (liveFiles[0] && liveFiles[0].url) return liveFiles[0].url;
+  async function addList(prefix, filter) {
+    if (!prefix) return;
+    const result = await list({ prefix, limit: 1000 });
+    for (const blob of result.blobs || []) {
+      if (!blob || !blob.url || !blob.pathname) continue;
+      if (filter && !filter(blob)) continue;
+      const key = blob.pathname + '|' + blob.url;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      files.push(blob);
+    }
   }
 
-  if (legacyFile) {
-    const legacy = await list({ prefix: legacyFile, limit: 100 });
-    const legacyFiles = (legacy.blobs || [])
-      .filter((blob) => blob.pathname === legacyFile)
-      .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0));
-    if (legacyFiles[0] && legacyFiles[0].url) return legacyFiles[0].url;
-  }
+  await addList(livePrefix, (blob) => blob.pathname.startsWith(livePrefix));
+  await addList(legacyFile, (blob) => blob.pathname === legacyFile);
 
-  return null;
+  return files.sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0));
+}
+
+async function getLatestBlobUrl(options) {
+  const files = await getBlobJsonCandidates(options);
+  return files[0] && files[0].url ? files[0].url : null;
 }
 
 async function readLatestJson(options) {
   const url = await getLatestBlobUrl(options);
   if (!url) return null;
   return await fetchJsonNoCache(url, options.label);
+}
+
+async function readAllJson(options) {
+  const files = await getBlobJsonCandidates(options);
+  const output = [];
+  for (const blob of files) {
+    try {
+      output.push({
+        pathname: blob.pathname,
+        uploadedAt: blob.uploadedAt,
+        data: await fetchJsonNoCache(blob.url, options.label)
+      });
+    } catch (e) {
+      // Skip unreadable older blobs but continue reading the rest.
+    }
+  }
+  return output;
 }
 
 async function writeUniqueJson({ prefix, data }) {
@@ -57,4 +81,4 @@ async function writeUniqueJson({ prefix, data }) {
   });
 }
 
-module.exports = { requireBlobToken, readLatestJson, writeUniqueJson };
+module.exports = { requireBlobToken, readLatestJson, readAllJson, writeUniqueJson };

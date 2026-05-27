@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { readLatestJson, writeUniqueJson, requireBlobToken } = require('./_blob');
+const { readAllJson, writeUniqueJson, requireBlobToken } = require('./_blob');
 
 const LEGACY_FILE = 'counter-duas.json';
 const LIVE_PREFIX = 'counter-duas-live-';
@@ -21,32 +21,45 @@ function slugify(text){
 }
 
 function validateDuas(input){
-  const arr = Array.isArray(input) ? input : [];
+  const raw = Array.isArray(input) ? input : (input && Array.isArray(input.duas) ? input.duas : []);
   const used = new Set();
-  return arr.map((d,i)=>{
+  return raw.map((d,i)=>{
     let id = slugify(d.id || d.title || `dua_${i+1}`), base=id, n=2;
     while(used.has(id)) id = base + '_' + n++;
     used.add(id);
-    const limit = Math.max(1, Math.min(10000, Number(d.limit) || 100));
+    const limit = Math.max(1, Math.min(10000, Number(d.limit || d.target || d.count) || 100));
     return {
       id,
-      title: String(d.title || `Dua ${i+1}`).slice(0,160),
-      arabic: String(d.arabic || '').slice(0,5000),
-      meaning: String(d.meaning || '').slice(0,300),
+      title: String(d.title || d.name || `Dua ${i+1}`).slice(0,160),
+      arabic: String(d.arabic || d.text || '').slice(0,5000),
+      meaning: String(d.meaning || d.translation || '').slice(0,300),
       limit,
-      note: String(d.note || ('Recite ' + limit + ' times')).slice(0,300)
+      note: String(d.note || d.description || ('Recite ' + limit + ' times')).slice(0,300)
     };
-  });
+  }).filter(d => d.title || d.arabic);
+}
+
+function mergeDuaLists(lists){
+  const map = new Map();
+  // Apply older first, latest last. Missing older duas remain, updated latest duas win.
+  for (const list of lists.reverse()) {
+    for (const dua of validateDuas(list)) {
+      const key = dua.id || slugify(dua.title);
+      map.set(key, { ...(map.get(key) || {}), ...dua });
+    }
+  }
+  return Array.from(map.values());
 }
 
 function readFallbackFile(){
   try{return JSON.parse(fs.readFileSync(path.join(process.cwd(),'counter-duas.json'),'utf8'));}
-  catch(e){return [];}
+  catch(e){return [];} 
 }
 
 async function readBlobDuas(){
-  const data = await readLatestJson({ livePrefix: LIVE_PREFIX, legacyFile: LEGACY_FILE, label: 'counter duas' });
-  return data ? validateDuas(data) : null;
+  const versions = await readAllJson({ livePrefix: LIVE_PREFIX, legacyFile: LEGACY_FILE, label: 'counter duas' });
+  if (!versions.length) return null;
+  return mergeDuaLists(versions.map(v => v.data));
 }
 
 module.exports = async function handler(req,res){
@@ -56,7 +69,7 @@ module.exports = async function handler(req,res){
   if(req.method==='GET'){
     try{
       const data = await readBlobDuas();
-      if(data && data.length) return res.status(200).json({ok:true, source:'blob', updatedAt:new Date().toISOString(), duas:data});
+      if(data && data.length) return res.status(200).json({ok:true, source:'blob-merged', updatedAt:new Date().toISOString(), duas:data});
     }catch(e){
       // Keep page alive with JSON fallback until Blob env/store is configured.
     }
