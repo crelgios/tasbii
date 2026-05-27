@@ -16,6 +16,22 @@ function setNoStore(res){
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Cache-Control, Pragma');
 }
 
+
+async function parseJsonBody(req) {
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string') {
+    try { return JSON.parse(req.body || '{}'); } catch (e) { return {}; }
+  }
+  return await new Promise((resolve) => {
+    let raw = '';
+    req.on('data', chunk => { raw += chunk; });
+    req.on('end', () => {
+      try { resolve(raw ? JSON.parse(raw) : {}); } catch (e) { resolve({}); }
+    });
+    req.on('error', () => resolve({}));
+  });
+}
+
 function slugify(text){
   return String(text||'dua').toLowerCase().trim().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'dua';
 }
@@ -81,7 +97,7 @@ module.exports = async function handler(req,res){
       const adminPassword=process.env.ADMIN_PASSWORD;
       if(!adminPassword) return res.status(500).json({error:'ADMIN_PASSWORD env variable is missing in Vercel'});
       requireBlobToken();
-      const body=req.body||{};
+      const body = await parseJsonBody(req);
       if(body.password!==adminPassword) return res.status(401).json({error:'Wrong admin password'});
       const duas=validateDuas(body.duas);
       if(!duas.length) throw new Error('Add at least one dua');

@@ -1,83 +1,61 @@
-Tasbii App - Clean Vercel Blob Version
+Tasbii Private App - Vercel Blob Setup
+=====================================
 
-FILES KEPT
-- index.html: 99 Names Tasbeeh page
+This project is your private Tasbii app. It is not connected to Aliwvide or any other website.
+
+Important files:
+- index.html: 99 Names / main Tasbii page
 - daily-dhikr.html: Daily Dhikr page
 - dua-counter.html: My Dua Counter page
-- secure-aliwvide-control-9xq2m.html: hidden admin page
-- dhikr-packs.json: fallback Daily Dhikr data
-- counter-duas.json: fallback My Dua data
-- api/auth.js: checks admin password
-- api/packs.js: reads/saves Daily Dhikr data to Vercel Blob
-- api/counter-duas.js: reads/saves My Dua data to Vercel Blob
-- api/_blob.js: Vercel Blob helper
-- package.json and vercel.json: deployment config
+- tasbii-private-admin.html: private admin dashboard
+- api/auth.js: checks ADMIN_PASSWORD
+- api/packs.js: saves/loads Daily Dhikr data from Vercel Blob
+- api/counter-duas.js: saves/loads My Dua data from Vercel Blob
 
-FILES REMOVED
-- old public admin.html redirect
-- old duplicate admin-main.js
-- multiple old README/change-note files
-- unused Supabase/env example files
-- hidden admin-tab unlock code from index.html
-
-VERCEL ENVIRONMENT VARIABLES
-Add these in Vercel Project > Settings > Environment Variables:
-
-ADMIN_PASSWORD=your-password
+Required Vercel Environment Variables:
+--------------------------------------
+ADMIN_PASSWORD=your-private-admin-password
 BLOB_READ_WRITE_TOKEN=your-vercel-blob-read-write-token
 
-After adding/changing env variables, redeploy the Vercel project.
+Admin link after deployment:
+----------------------------
+https://your-domain.com/tasbii-private-admin
 
-HIDDEN ADMIN URL
-https://your-domain.com/secure-aliwvide-control-9xq2m
+If admin does not open:
+-----------------------
+1. Open this URL:
+   https://your-domain.com/api/auth
 
-HOW TO ADD A NEW MY DUA TASBIH
-1. Open the hidden admin URL.
-2. Enter your ADMIN_PASSWORD.
-3. Click the My Dua tab.
-4. Click + New Dua.
-5. Fill:
-   - Dua Title
-   - Arabic / Dua Text
-   - Meaning
-   - Recitation Limit
-   - Note
-6. Click Save Live.
-7. Open /dua-counter.html and refresh.
+2. It should show:
+   { "ok": true, "adminPasswordConfigured": true }
 
-HOW TO ADD A NEW DAILY DHIKR TAB/DUA
-1. Open the hidden admin URL.
-2. Enter your ADMIN_PASSWORD.
-3. Stay on the Daily Dhikr tab.
-4. Use + New Pack if you want a new tab/category.
-5. Use + New Dua inside the selected pack to add a dua.
-6. Fill title, target count, Arabic text, and note.
-7. Click Save Live.
-8. Open /daily-dhikr.html and refresh.
+3. If adminPasswordConfigured is false, add ADMIN_PASSWORD in Vercel.
 
-LATEST FIXES IN THIS ZIP
-------------------------
-1. Premium dropdown moved near the top on:
-   - index.html (99 Names)
-   - dua-counter.html (My Dua Tasbih)
-   Daily Dhikr was not changed because it already had the premium dropdown.
+4. Open this URL:
+   https://your-domain.com/api/counter-duas
 
-2. Vercel Blob reading is now recovery-friendly:
-   - It reads old same-name Blob files like counter-duas.json and dhikr-packs.json.
-   - It also reads newer live files like counter-duas-live-*.json and dhikr-packs-live-*.json.
-   - It merges older and newer entries, so manually added duas from the old Blob file can appear again.
+5. If source is fallback, your app is not reading Vercel Blob. Check BLOB_READ_WRITE_TOKEN and redeploy.
 
-IMPORTANT AFTER DEPLOY
-----------------------
-Open these URLs after redeploying:
-/api/counter-duas
-/api/packs
+After changing env variables:
+-----------------------------
+Always redeploy the project from Vercel Deployments.
 
-If /api/counter-duas says source: "blob-merged", your Vercel Blob data is being read.
-If it says source: "fallback", your BLOB_READ_WRITE_TOKEN is missing/wrong or connected to an empty Blob store.
+How to add My Dua:
+------------------
+1. Open /tasbii-private-admin
+2. Login with ADMIN_PASSWORD
+3. Click My Dua
+4. Click + New Dua
+5. Fill title, Arabic, meaning, recitation limit, and note
+6. Click Save Live
+7. Open /dua-counter and refresh
 
-
-BACK BUTTON FIX
-- This version includes a browser/app back-button visibility fix.
-- It removes the old page-transition state when a page is restored from browser cache.
-- It also adds explicit Vercel rewrites for /, /index, /daily-dhikr, and /dua-counter.
+How to add Daily Dhikr:
+-----------------------
+1. Open /tasbii-private-admin
+2. Login with ADMIN_PASSWORD
+3. Click Daily Dhikr
+4. Add or edit a pack
+5. Click + Add Dua
+6. Click Save Live
+7. Open /daily-dhikr and refresh

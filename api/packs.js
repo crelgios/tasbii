@@ -16,6 +16,22 @@ function setNoStore(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Pragma');
 }
 
+
+async function parseJsonBody(req) {
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string') {
+    try { return JSON.parse(req.body || '{}'); } catch (e) { return {}; }
+  }
+  return await new Promise((resolve) => {
+    let raw = '';
+    req.on('data', chunk => { raw += chunk; });
+    req.on('end', () => {
+      try { resolve(raw ? JSON.parse(raw) : {}); } catch (e) { resolve({}); }
+    });
+    req.on('error', () => resolve({}));
+  });
+}
+
 function normalizePacks(data) {
   if (Array.isArray(data)) {
     return Object.fromEntries(data.map((p, i) => [p.id || `pack_${i + 1}`, {
@@ -98,7 +114,7 @@ module.exports = async function handler(req, res) {
       if (!adminPassword) return res.status(500).json({ error: 'ADMIN_PASSWORD env variable is missing in Vercel' });
       requireBlobToken();
 
-      const body = req.body || {};
+      const body = await parseJsonBody(req);
       if (body.password !== adminPassword) return res.status(401).json({ error: 'Wrong admin password' });
 
       const packs = validatePacks(body.packs);
