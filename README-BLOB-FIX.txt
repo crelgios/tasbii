@@ -23,3 +23,9 @@ Test after redeploy:
 /api/packs?debug=1
 
 If /api/blob-check shows ok:true and counterDuaFilesFound is more than 0, old duas are connected again.
+
+
+ADMIN SAVE NOTIFICATION UPDATE
+- The private admin now shows a top notification when saving.
+- It shows Saving..., then Saved successfully, or the exact error message.
+- Save buttons are disabled while saving to prevent double-click duplicate saves.

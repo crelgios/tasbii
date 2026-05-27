@@ -58,8 +58,15 @@ textarea.arabic{font-family:'Amiri',serif;font-size:1.45rem;direction:rtl;text-a
 .preview-card h3{color:var(--primary);font-size:1.25rem}
 .preview-ar{font-family:'Amiri',serif;font-size:clamp(1.8rem,6vw,3.2rem);line-height:1.6;direction:rtl;margin:12px 0}
 .codebox{font-family:ui-monospace,Consolas,monospace;font-size:.82rem;line-height:1.5;background:#07101f;color:#e8fff8;border-radius:20px;padding:14px;max-height:310px;overflow:auto;white-space:pre-wrap}
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:12px 18px;color:var(--text);z-index:99;transition:.3s;white-space:nowrap}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:22px;padding:14px 18px;color:var(--text);z-index:10000;transition:.28s;min-width:min(460px,calc(100vw - 24px));max-width:calc(100vw - 24px);display:flex;align-items:center;gap:12px;font-weight:800;line-height:1.45}
 .toast.show{transform:translateX(-50%) translateY(0)}
+.toast::before{content:"⏳";display:grid;place-items:center;width:30px;height:30px;border-radius:999px;background:rgba(7,139,114,.12);flex:0 0 auto}
+.toast.success{border-color:rgba(7,139,114,.45);background:rgba(236,255,248,.96)}
+.toast.success::before{content:"✅"}
+.toast.error{border-color:rgba(230,57,70,.45);background:rgba(255,245,246,.98);color:#8a1f2a}
+.toast.error::before{content:"⚠️"}
+.toast.loading::before{content:"⏳"}
+.btn[disabled]{opacity:.62;cursor:not-allowed;transform:none!important}
 @media(max-width:860px){body{padding:10px}.grid{grid-template-columns:1fr}.topbar{justify-content:center;text-align:center}.brand{width:100%;justify-content:center}.actions{justify-content:center;width:100%}.card{border-radius:24px}.btn{font-size:.84rem;padding:10px 12px}}
 /* Smooth page/tab transition */
 body{animation:pageFadeIn .42s ease both;}
@@ -148,8 +155,6 @@ body:not(.admin-locked) .admin-login{display:none!important}
       </div>
     </div>
     <div class="actions">
-      <button class="btn primary" id="exportBtn">Export Code</button>
-      <button class="btn gold" id="downloadBtn">Backup JSON</button>
       <a class="btn primary" href="daily-dhikr.html">Open Daily Dhikr</a>
       <a class="btn primary" href="dua-counter.html">Open My Dua</a>
     </div>
@@ -211,17 +216,6 @@ body:not(.admin-locked) .admin-login{display:none!important}
       </div>
     </section>
   </main>
-
-  <section class="card" style="margin-top:18px">
-    <div class="card-head">
-      <h2>Export for your Daily Dhikr code</h2>
-      <button class="btn" id="copyCodeBtn">Copy Code</button>
-    </div>
-    <div class="card-body">
-      <p class="small" style="margin-bottom:10px">Click <b>Save Live</b> to update the live Vercel website. Backup JSON is only for safety.</p>
-      <div id="codeBox" class="codebox"></div>
-    </div>
-  </section>
 
   </section>
 
@@ -454,7 +448,6 @@ async function saveLivePacks(){
     if(res.status === 401 || res.status === 403) sessionStorage.removeItem("dhikrAdminPassword");
     throw new Error(data.error || "Live save failed");
   }
-  showToast("Saved to Vercel Blob");
   return data;
 }
 
@@ -529,7 +522,7 @@ function renderPreview(){
 }
 
 function renderCode(){
-  codeBox.textContent = "const DHIKR_PACKS = " + JSON.stringify(packs, null, 2) + ";";
+  if(codeBox) codeBox.textContent = "const DHIKR_PACKS = " + JSON.stringify(packs, null, 2) + ";";
 }
 
 function renderAll(){
@@ -545,11 +538,15 @@ async function savePackFromInputs(){
   pack.desc = packDesc.value.trim();
   savePacks();
   renderAll();
+  setSavingState("savePackBtn", true);
+  showToast("Saving Daily Dhikr to live Vercel Blob...", "loading", false);
   try{
     await savePacksLive();
-    showToast("Saved to Vercel Blob. Open Daily Dhikr to check.");
+    showToast("Daily Dhikr saved successfully. Open Daily Dhikr and refresh to check.", "success", 5200);
   }catch(error){
-    showToast(error.message || "Live save failed");
+    showToast(error.message || "Live save failed", "error", 8000);
+  }finally{
+    setSavingState("savePackBtn", false);
   }
 }
 
@@ -734,6 +731,8 @@ function cleanCounterDuasForSave(){
 }
 
 async function saveCounterDuasLive(){
+  setSavingState("saveCounterDuasBtn", true);
+  showToast("Saving My Dua Tasbih to live Vercel Blob...", "loading", false);
   try{
     if(counterDuas[activeCounterIndex]) syncCounterEditor();
     renderCounterDuas();
@@ -751,9 +750,11 @@ async function saveCounterDuasLive(){
     counterDuas = data.duas || counterDuas;
     activeCounterIndex = Math.min(activeCounterIndex, counterDuas.length - 1);
     renderCounterDuas();
-    showToast("My Dua Counter saved to Vercel Blob");
+    showToast("My Dua Tasbih saved successfully. Open My Dua and refresh to check.", "success", 5200);
   }catch(err){
-    alert(err.message || "Save failed");
+    showToast(err.message || "Save failed", "error", 8000);
+  }finally{
+    setSavingState("saveCounterDuasBtn", false);
   }
 }
 
@@ -801,18 +802,36 @@ function exportCode(){
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function escapeAttr(s){return escapeHtml(s).replace(/`/g,"&#096;")}
-function showToast(msg){toast.textContent=msg;toast.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove("show"),1800)}
+function showToast(msg, type = "success", timeout = 3600){
+  toast.textContent = msg;
+  toast.className = "toast show " + (type || "success");
+  clearTimeout(showToast.t);
+  if(timeout !== false){
+    showToast.t = setTimeout(() => toast.classList.remove("show"), timeout);
+  }
+}
 
-document.getElementById("savePackBtn").onclick = savePackFromInputs;
-document.getElementById("newPackBtn").onclick = addPack;
-document.getElementById("deletePackBtn").onclick = deletePack;
-document.getElementById("addStepBtn").onclick = addStep;
-document.getElementById("downloadBtn").onclick = downloadJSON;
-document.getElementById("copyCodeBtn").onclick = copyCode;
-document.getElementById("exportBtn").onclick = exportCode;
-document.getElementById("addCounterDuaBtn").onclick = addCounterDua;
-document.getElementById("deleteCounterDuaBtn").onclick = deleteCounterDua;
-document.getElementById("saveCounterDuasBtn").onclick = saveCounterDuasLive;
+function setSavingState(buttonId, isSaving){
+  const btn = document.getElementById(buttonId);
+  if(!btn) return;
+  if(isSaving){
+    btn.dataset.originalText = btn.dataset.originalText || btn.textContent;
+    btn.textContent = "Saving...";
+    btn.disabled = true;
+  }else{
+    btn.textContent = btn.dataset.originalText || btn.textContent.replace("Saving...", "Save Live");
+    btn.disabled = false;
+  }
+}
+
+function bindClick(id, handler){ const el = document.getElementById(id); if(el) el.onclick = handler; }
+bindClick("savePackBtn", savePackFromInputs);
+bindClick("newPackBtn", addPack);
+bindClick("deletePackBtn", deletePack);
+bindClick("addStepBtn", addStep);
+bindClick("addCounterDuaBtn", addCounterDua);
+bindClick("deleteCounterDuaBtn", deleteCounterDua);
+bindClick("saveCounterDuasBtn", saveCounterDuasLive);
 [counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(false); renderCounterPreview(); }); });
 
 function switchAdminPanel(panel){

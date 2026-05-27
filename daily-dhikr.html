@@ -24,6 +24,22 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
 @keyframes pageFadeOut{from{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}to{opacity:0;transform:translateY(-14px) scale(.985);filter:blur(8px)}}
 @media(prefers-reduced-motion:reduce){body,body.is-leaving{animation:none!important}}
 
+
+/* Mobile reachability fix: selected dhikr scrolls straight to the tap button and avoids horizontal overflow. */
+html,body{max-width:100%;overflow-x:hidden;}
+.app,.card,.routine-card,.pack-bar,.steps{max-width:100%;}
+@media(max-width:760px){
+  .pack-bar{position:relative;top:auto;z-index:5;margin-bottom:10px;}
+  .pack-select{padding:14px 46px 14px 14px;font-size:.94rem;}
+  .routine-card{padding:14px 12px 18px;border-radius:24px;}
+  .stage{min-height:auto;gap:8px;padding:4px 0;}
+  .step-chip{padding:7px 11px;font-size:.8rem;}
+  .dua-title{font-size:1.12rem;}
+  .arabic{font-size:clamp(1.55rem,8.5vw,2.85rem);line-height:1.28;}
+  .note{font-size:.86rem;line-height:1.45;}
+  .tap-zone{width:min(142px,43vw);height:min(142px,43vw);margin:6px auto 0;}
+  .steps{margin-top:12px;padding:12px;border-radius:24px;}
+}
 </style>
 </head>
 <body>
@@ -229,10 +245,11 @@ function save(){localStorage.setItem('dailyDhikrPacks',JSON.stringify(state));}
 function currentPack(){return PACKS.find(p=>p.id===state.packId)||PACKS[0];}
 function key(i=state.stepIndex){return state.packId+'_'+i;}
 function renderSelect(){packSelect.innerHTML=PACKS.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); packSelect.value=state.packId;}
-function switchPack(id){state.packId=id;state.stepIndex=0;stage.classList.add('fade-out');setTimeout(()=>{stage.classList.remove('fade-out');renderAll();save();},180);}
+function scrollTapIntoView(){setTimeout(()=>{const btn=document.getElementById('tap-btn'); if(btn){btn.scrollIntoView({behavior:'smooth',block:'center'}); btn.focus({preventScroll:true});}},150);}
+function switchPack(id){state.packId=id;state.stepIndex=0;stage.classList.add('fade-out');setTimeout(()=>{stage.classList.remove('fade-out');renderAll();save();scrollTapIntoView();},180);}
 function renderAll(){const pack=currentPack(); const step=pack.steps[state.stepIndex]||pack.steps[0]; const count=state.counts[key()]||0; const finished=isPackComplete(); packBadge.innerHTML=`<i class="fas ${pack.icon}"></i> ${pack.steps.length} steps`; if(finished){stage.style.display='none';completePanel.classList.add('show');}else{stage.style.display='flex';completePanel.classList.remove('show');}
 stepChip.innerHTML=`<i class="fas ${pack.icon}"></i> Step ${state.stepIndex+1} of ${pack.steps.length}`; duaTitle.textContent=step.title; arabic.textContent=step.arabic; note.textContent=step.note; counterText.innerHTML=`<strong>${Math.min(count,step.target)}</strong> / ${step.target}`; renderSteps();}
-function renderSteps(){const pack=currentPack();stepsBox.innerHTML='';pack.steps.forEach((s,i)=>{const done=!!state.completed[state.packId+'_'+i];const active=i===state.stepIndex&&!isPackComplete();const btn=document.createElement('button');btn.type='button';btn.className='step-item '+(done?'done ':'')+(active?'active':'');btn.innerHTML=`<span class="num">${done?'<i class="fas fa-check"></i>':i+1}</span><span><div class="step-name">${s.title}</div><div class="step-sub">${s.target} time${s.target>1?'s':''}</div></span><span class="status">${done?'Done':'Pending'}</span>`;btn.onclick=()=>{state.stepIndex=i;renderAll();save();window.scrollTo({top:0,behavior:'smooth'});};stepsBox.appendChild(btn);});}
+function renderSteps(){const pack=currentPack();stepsBox.innerHTML='';pack.steps.forEach((s,i)=>{const done=!!state.completed[state.packId+'_'+i];const active=i===state.stepIndex&&!isPackComplete();const btn=document.createElement('button');btn.type='button';btn.className='step-item '+(done?'done ':'')+(active?'active':'');btn.innerHTML=`<span class="num">${done?'<i class="fas fa-check"></i>':i+1}</span><span><div class="step-name">${s.title}</div><div class="step-sub">${s.target} time${s.target>1?'s':''}</div></span><span class="status">${done?'Done':'Pending'}</span>`;btn.onclick=()=>{state.stepIndex=i;renderAll();save();scrollTapIntoView();window.scrollTo({top:0,behavior:'smooth'});};stepsBox.appendChild(btn);});}
 function tap(e){createRipple(e); const pack=currentPack(); const step=pack.steps[state.stepIndex]; const k=key(); state.counts[k]=(state.counts[k]||0)+1; if(state.counts[k]>=step.target){state.counts[k]=step.target;state.completed[k]=true; const next=findNextPending(); if(next!==-1){state.stepIndex=next;showToast('Next dua opened ✨'); animateStage();}else{showToast('Pack completed 🤍');celebrate();}} renderAll();save();}
 function findNextPending(){const pack=currentPack();for(let i=0;i<pack.steps.length;i++){if(!state.completed[state.packId+'_'+i])return i;}return -1;}
 function isPackComplete(){const pack=currentPack();return pack.steps.every((_,i)=>state.completed[state.packId+'_'+i]);}
