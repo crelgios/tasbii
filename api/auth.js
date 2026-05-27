@@ -1,9 +1,9 @@
 function setHeaders(res) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-store, max-age=0, must-revalidate');
+  res.setHeader('Cache-Control', 'no-store, no-cache, max-age=0, must-revalidate');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Pragma');
 }
 
 module.exports = async function handler(req, res) {
@@ -14,7 +14,7 @@ module.exports = async function handler(req, res) {
 
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) {
-    return res.status(500).json({ error: 'ADMIN_PASSWORD env variable is missing in Vercel' });
+    return res.status(500).json({ error: 'ADMIN_PASSWORD env variable is missing' });
   }
 
   const body = req.body || {};

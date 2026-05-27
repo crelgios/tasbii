@@ -1,4 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="robots" content="noindex,nofollow,noarchive" />
+<title>Secure Dhikr Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#ecfff8;--bg2:#eef4ff;--card:rgba(255,255,255,.86);--text:#14213d;--muted:#667085;--primary:#078b72;--primary2:#16c79a;--gold:#d9a441;--danger:#e63946;--line:rgba(7,139,114,.18);--shadow:0 22px 70px rgba(8,61,70,.18);--glass:rgba(255,255,255,.58);--btnText:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Poppins',system-ui,sans-serif;color:var(--text);overflow-x:hidden;background:radial-gradient(circle at 20% 10%,rgba(22,199,154,.32),transparent 30%),radial-gradient(circle at 85% 18%,rgba(217,164,65,.25),transparent 28%),linear-gradient(135deg,var(--bg1),var(--bg2));padding:16px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;animation:gridMove 18s linear infinite}
+@keyframes gridMove{to{background-position:44px 44px}}
+.app{width:min(1120px,100%);margin:auto;position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:17px;background:linear-gradient(135deg,var(--primary),var(--gold));display:grid;place-items:center;color:white;box-shadow:0 0 30px rgba(22,199,154,.4);font-size:22px}
+h1{font-size:clamp(1.45rem,5vw,2.25rem);line-height:1;color:var(--primary)}
+.brand p{font-size:.86rem;color:var(--muted);margin-top:5px}
+.actions,.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.admin-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:4px 0 18px}.admin-tab{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s}.admin-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}.admin-panel{display:none;animation:adminPanelIn .25s ease both}.admin-panel.active{display:block}@keyframes adminPanelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.btn{border:1px solid var(--line);background:var(--glass);color:var(--text);padding:11px 14px;border-radius:999px;cursor:pointer;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.06);transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);border-color:var(--primary)}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:var(--btnText);border-color:transparent}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffd166);color:#3a2a00;border-color:transparent}
+.btn.danger{color:var(--danger)}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
+.admin-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 12px;flex-wrap:wrap}.admin-title h2{color:var(--primary);font-size:1.2rem}.counter-preview{padding:18px;display:grid;gap:12px}.counter-preview .preview-card{min-height:170px;display:flex;flex-direction:column;justify-content:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(18px);overflow:hidden}
+.card-head{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.card-head h2{font-size:1.1rem;color:var(--primary)}
+.card-body{padding:18px}
+.field{display:grid;gap:7px;margin-bottom:13px}
+label{font-weight:800;color:var(--primary);font-size:.9rem}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:18px;padding:13px 14px;background:rgba(255,255,255,.62);color:var(--text);font:inherit;font-size:16px;outline:none}
+textarea{min-height:120px;resize:vertical;line-height:1.7}
+textarea.arabic{font-family:'Amiri',serif;font-size:1.45rem;direction:rtl;text-align:right}
+.pack-list{display:grid;gap:10px}
+.pack-item{border:1px solid var(--line);border-radius:20px;background:var(--glass);padding:13px;cursor:pointer;transition:.2s}
+.pack-item:hover,.pack-item.active{border-color:var(--primary);transform:translateY(-1px)}
+.pack-item.active{background:linear-gradient(135deg,rgba(7,139,114,.14),rgba(22,199,154,.12))}
+.pack-title{font-weight:800;color:var(--text)}
+.pack-meta{font-size:.8rem;color:var(--muted);margin-top:4px}
+.step-list{display:grid;gap:12px}
+.step{border:1px solid var(--line);background:var(--glass);border-radius:22px;padding:14px}
+.step-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.step-title{font-weight:800;color:var(--primary)}
+.step-ar{font-family:'Amiri',serif;direction:rtl;text-align:right;font-size:1.35rem;line-height:1.7;margin:8px 0;color:var(--text)}
+.step-note{color:var(--muted);font-size:.88rem}
+.small{font-size:.82rem;color:var(--muted)}
+.hidden{display:none!important}
+.preview{padding:18px;display:grid;gap:12px}
+.preview-card{text-align:center;padding:22px;border-radius:24px;background:linear-gradient(135deg,rgba(22,199,154,.12),rgba(217,164,65,.12));border:1px solid var(--line)}
+.preview-card h3{color:var(--primary);font-size:1.25rem}
+.preview-ar{font-family:'Amiri',serif;font-size:clamp(1.8rem,6vw,3.2rem);line-height:1.6;direction:rtl;margin:12px 0}
+.codebox{font-family:ui-monospace,Consolas,monospace;font-size:.82rem;line-height:1.5;background:#07101f;color:#e8fff8;border-radius:20px;padding:14px;max-height:310px;overflow:auto;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:999px;padding:12px 18px;color:var(--text);z-index:99;transition:.3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:860px){body{padding:10px}.grid{grid-template-columns:1fr}.topbar{justify-content:center;text-align:center}.brand{width:100%;justify-content:center}.actions{justify-content:center;width:100%}.card{border-radius:24px}.btn{font-size:.84rem;padding:10px 12px}}
+/* Smooth page/tab transition */
+body{animation:pageFadeIn .42s ease both;}
+body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
+.app{will-change:transform,opacity;}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(16px) scale(.985);filter:blur(8px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes pageFadeOut{from{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}to{opacity:0;transform:translateY(-14px) scale(.985);filter:blur(8px)}}
+@media(prefers-reduced-motion:reduce){body,body.is-leaving{animation:none!important}}
 
+</style>
+</head>
+<body><script>
+(async function(){
+  if (sessionStorage.getItem('adminUnlocked') === 'yes') return;
+  const pass = prompt('Enter admin password');
+  if (!pass) { window.location.href = 'index.html'; return; }
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password: pass})
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) {
+      sessionStorage.setItem('adminUnlocked', 'yes');
+      sessionStorage.setItem('dhikrAdminPassword', pass);
+    } else {
+      alert(data.error || 'Wrong password');
+      window.location.href = 'index.html';
+    }
+  } catch (e) {
+    alert('Password check failed. Please check API deployment.');
+    window.location.href = 'index.html';
+  }
+})();
+</script>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">☾</div>
+      <div>
+        <h1>Secure Dhikr Admin</h1>
+        <p>Hidden private page to manage Daily Dhikr and My Dua content</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="exportBtn">Export Code</button>
+      <button class="btn gold" id="downloadBtn">Backup JSON</button>
+      <a class="btn primary" href="daily-dhikr.html">Open Daily Dhikr</a>
+      <a class="btn primary" href="dua-counter.html">Open My Dua</a>
+    </div>
+  </header>
+
+  <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+    <button type="button" class="admin-tab active" id="dailyAdminTab">Daily Dhikr</button>
+    <button type="button" class="admin-tab" id="myDuaAdminTab">My Dua</button>
+  </div>
+
+  <section class="admin-panel active" id="dailyAdminPanel">
+  <main class="grid">
+    <section class="card">
+      <div class="card-head">
+        <h2>Dua Packs</h2>
+        <button class="btn primary" id="newPackBtn">+ New Pack</button>
+      </div>
+      <div class="card-body">
+        <div id="packList" class="pack-list"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 id="editorTitle">Edit Pack</h2>
+        <div class="row">
+          <button class="btn danger" id="deletePackBtn">Delete Pack</button>
+          <button class="btn primary" id="savePackBtn">Save Live</button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label>Pack Name</label>
+          <input id="packName" placeholder="Example: Dua for Evil Eye" />
+        </div>
+        <div class="field">
+          <label>Short Description</label>
+          <input id="packDesc" placeholder="Example: Protection routine" />
+        </div>
+
+        <div class="card" style="box-shadow:none;margin:14px 0">
+          <div class="card-head">
+            <h2>Steps / Duas</h2>
+            <button class="btn primary" id="addStepBtn">+ Add Dua</button>
+          </div>
+          <div class="card-body">
+            <div id="stepList" class="step-list"></div>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none">
+          <div class="card-head">
+            <h2>Live Preview</h2>
+            <span class="small">First step preview</span>
+          </div>
+          <div id="preview" class="preview"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="card" style="margin-top:18px">
+    <div class="card-head">
+      <h2>Export for your Daily Dhikr code</h2>
+      <button class="btn" id="copyCodeBtn">Copy Code</button>
+    </div>
+    <div class="card-body">
+      <p class="small" style="margin-bottom:10px">Click <b>Save Live</b> to update the live Vercel website. Backup JSON is only for safety.</p>
+      <div id="codeBox" class="codebox"></div>
+    </div>
+  </section>
+
+  </section>
+
+  <section class="admin-panel" id="myDuaAdminPanel">
+  <div class="admin-title">
+    <h2>My Dua Counter Admin</h2>
+    <span class="small">Same editor style as Daily Dhikr • Shows on My Dua tab</span>
+  </div>
+
+  <main class="grid" id="counterAdminPanel">
+    <section class="card">
+      <div class="card-head">
+        <h2>My Dua List</h2>
+        <button class="btn primary" id="addCounterDuaBtn">+ New Dua</button>
+      </div>
+      <div class="card-body">
+        <div id="counterDuaList" class="pack-list"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Edit My Dua</h2>
+        <div class="row">
+          <button class="btn danger" id="deleteCounterDuaBtn">Delete Dua</button>
+          <button class="btn primary" id="saveCounterDuasBtn">Save Live</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Dua Title</label>
+          <input id="counterTitle" placeholder="Example: Durood Shareef" />
+        </div>
+        <div class="field">
+          <label>Arabic / Dua Text</label>
+          <textarea id="counterArabic" class="arabic" placeholder="Paste Arabic dua here"></textarea>
+        </div>
+        <div class="field">
+          <label>Meaning</label>
+          <input id="counterMeaning" placeholder="Example: Send blessings upon Prophet Muhammad ﷺ" />
+        </div>
+        <div class="field">
+          <label>Recitation Limit</label>
+          <input id="counterLimit" type="number" min="1" step="1" placeholder="Example: 100 or 313" />
+        </div>
+        <div class="field">
+          <label>Note</label>
+          <input id="counterNote" placeholder="Example: Recite 100 times" />
+        </div>
+
+        <div class="card" style="box-shadow:none;margin-top:14px">
+          <div class="card-head">
+            <h2>Live Preview</h2>
+            <span class="small">My Dua counter preview</span>
+          </div>
+          <div id="counterPreview" class="counter-preview"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  </section>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
 const STORAGE_KEY = "dailyDhikrPacksAdmin";
 
 const DEFAULT_PACKS = {
@@ -334,10 +583,7 @@ function moveStep(index, dir){
 
 async function loadCounterDuas(){
   try{
-    const res = await fetch(COUNTER_DUAS_URL + "?v=" + Date.now(), {
-      cache:"no-store",
-      headers:{"Cache-Control":"no-cache","Pragma":"no-cache"}
-    });
+    const res = await fetch(COUNTER_DUAS_URL, {cache:"no-store"});
     if(res.ok){
       const data = await res.json();
       const list = Array.isArray(data) ? data : (Array.isArray(data.duas) ? data.duas : []);
@@ -349,11 +595,11 @@ async function loadCounterDuas(){
   ];
 }
 
-function renderCounterDuas(){
+function renderCounterDuas(updateEditor = true){
   if(!counterDuaList) return;
   counterDuaList.innerHTML = "";
   if(!counterDuas.length){
-    counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
+    counterDuas.push({id:"dua_" + Date.now(), title:"", arabic:"", meaning:"", limit:100, note:""});
   }
   if(activeCounterIndex < 0 || activeCounterIndex >= counterDuas.length) activeCounterIndex = 0;
 
@@ -371,7 +617,7 @@ function renderCounterDuas(){
     };
     counterDuaList.appendChild(div);
   });
-  renderCounterEditor();
+  if(updateEditor) renderCounterEditor();
 }
 
 function renderCounterEditor(){
@@ -405,17 +651,17 @@ function renderCounterPreview(){
 function syncCounterEditor(){
   const dua = counterDuas[activeCounterIndex];
   if(!dua) return;
-  dua.title = counterTitle.value.trim() || "Untitled Dua";
+  dua.title = counterTitle.value;
   dua.arabic = counterArabic.value;
-  dua.meaning = counterMeaning.value.trim();
+  dua.meaning = counterMeaning.value;
   dua.limit = Math.max(1, Number(counterLimit && counterLimit.value) || Number(dua.limit) || 100);
-  dua.note = counterNote.value.trim() || ("Recite " + dua.limit + " times");
-  dua.id = dua.id || slugify(dua.title);
+  dua.note = counterNote.value;
+  dua.id = dua.id || ("dua_" + Date.now());
 }
 
 function addCounterDua(){
   syncCounterEditor();
-  counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
+  counterDuas.push({id:"dua_" + Date.now(), title:"", arabic:"", meaning:"", limit:100, note:""});
   activeCounterIndex = counterDuas.length - 1;
   renderCounterDuas();
   showToast("Counter dua added");
@@ -435,6 +681,17 @@ async function deleteCounterDua(){
   }
 }
 
+function cleanCounterDuasForSave(){
+  return counterDuas.map((dua, index) => ({
+    id: dua.id || ("dua_" + Date.now() + "_" + index),
+    title: String(dua.title || "Untitled Dua"),
+    arabic: String(dua.arabic || ""),
+    meaning: String(dua.meaning || ""),
+    limit: Math.max(1, Number(dua.limit) || 100),
+    note: String(dua.note || ("Recite " + (Math.max(1, Number(dua.limit) || 100)) + " times"))
+  }));
+}
+
 async function saveCounterDuasLive(){
   try{
     if(counterDuas[activeCounterIndex]) syncCounterEditor();
@@ -443,7 +700,7 @@ async function saveCounterDuasLive(){
     const res = await fetch(COUNTER_DUAS_URL, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({password, duas: counterDuas})
+      body: JSON.stringify({password, duas: cleanCounterDuasForSave()})
     });
     const data = await res.json().catch(()=>({}));
     if(!res.ok){
@@ -515,6 +772,37 @@ document.getElementById("exportBtn").onclick = exportCode;
 document.getElementById("addCounterDuaBtn").onclick = addCounterDua;
 document.getElementById("deleteCounterDuaBtn").onclick = deleteCounterDua;
 document.getElementById("saveCounterDuasBtn").onclick = saveCounterDuasLive;
-[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(); renderCounterPreview(); }); });
+[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(false); renderCounterPreview(); }); });
+
+function switchAdminPanel(panel){
+  const dailyActive = panel === "daily";
+  document.getElementById("dailyAdminTab").classList.toggle("active", dailyActive);
+  document.getElementById("myDuaAdminTab").classList.toggle("active", !dailyActive);
+  document.getElementById("dailyAdminPanel").classList.toggle("active", dailyActive);
+  document.getElementById("myDuaAdminPanel").classList.toggle("active", !dailyActive);
+  localStorage.setItem("adminActivePanel", panel);
+}
+document.getElementById("dailyAdminTab").onclick = () => switchAdminPanel("daily");
+document.getElementById("myDuaAdminTab").onclick = () => switchAdminPanel("mydua");
+const savedAdminPanel = localStorage.getItem("adminActivePanel");
+if(savedAdminPanel === "mydua") switchAdminPanel("mydua");
 
 init();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('a[href]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      var href = this.getAttribute('href');
+      if(!href || href.charAt(0)==='#' || href.indexOf('http')===0 || href.indexOf('mailto:')===0 || href.indexOf('tel:')===0) return;
+      if(this.classList.contains('active')) return;
+      e.preventDefault();
+      document.body.classList.add('is-leaving');
+      setTimeout(function(){ window.location.href = href; }, 260);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

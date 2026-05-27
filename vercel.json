@@ -1,1 +1,28 @@
-{"version":2,"rewrites":[{"source":"/api/(.*)","destination":"/api/$1"}]}
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/secure-aliwvide-control-9xq2m",
+      "destination": "/secure-aliwvide-control-9xq2m.html"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/secure-aliwvide-control-9xq2m",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    },
+    {
+      "source": "/secure-aliwvide-control-9xq2m.html",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
+      ]
+    }
+  ]
+}

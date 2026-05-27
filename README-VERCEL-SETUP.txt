@@ -1,17 +1,17 @@
-VERCEL LIVE ADMIN SETUP
+VERCEL SETUP FOR THIS TASBEEH / DHIKR APP
 
-This version lets admin.html update Daily Dhikr live without replacing JSON files.
-
-1) Upload this full folder to GitHub.
-2) Import/deploy it on Vercel.
-3) In Vercel dashboard, open your project.
-4) Go to Storage and create/connect a KV database.
-   Vercel will add KV environment variables automatically.
+1) Upload this project to GitHub or Vercel.
+2) In Vercel, open your project.
+3) Go to Storage and create/connect a Vercel Blob store.
+4) Make sure Vercel adds BLOB_READ_WRITE_TOKEN to this same project.
 5) Go to Settings > Environment Variables and add:
-   ADMIN_PASSWORD = your-password-here
-6) Redeploy the project.
-7) Open /admin.html, add or edit duas, then click Save.
-8) Open /daily-dhikr.html. Your new duas should show for everyone.
 
-Do not put your Vercel token or GitHub token inside the website.
-Only use ADMIN_PASSWORD in Vercel Environment Variables.
+   ADMIN_PASSWORD=your-secure-admin-password
+   BLOB_READ_WRITE_TOKEN=your-vercel-blob-read-write-token
+
+6) Redeploy the project after adding env variables.
+7) Open hidden admin URL:
+
+   /secure-aliwvide-control-9xq2m
+
+Public pages will use dhikr-packs.json and counter-duas.json as fallback until live Blob data is saved.

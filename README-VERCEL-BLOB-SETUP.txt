@@ -1,31 +1,18 @@
-VERCEL BLOB LIVE ADMIN SETUP
+VERCEL BLOB SETUP
 
-This version lets you update Daily Dhikr packs from admin.html without replacing JSON files manually.
-It uses Vercel API Functions + Vercel Blob Storage.
+This version uses Vercel Blob again. Supabase is not required.
 
-FILES:
-- index.html = 99 Names page
-- daily-dhikr.html = public Daily Dhikr page
-- admin.html = password protected admin editor
-- dhikr-packs.json = fallback default data
-- api/packs.js = reads/writes live JSON to Vercel Blob
-- package.json = installs @vercel/blob
+Required environment variables in Vercel:
 
-VERCEL SETUP:
-1. Upload/deploy this whole project to Vercel.
-2. In Vercel dashboard, open your project.
-3. Go to Storage > Create Database > Blob.
-4. Choose Public Blob store.
-5. Connect it to this project. Vercel should add BLOB_READ_WRITE_TOKEN automatically.
-6. Go to Settings > Environment Variables.
-7. Add ADMIN_PASSWORD = your password, for example 786.
-8. Redeploy the project.
+ADMIN_PASSWORD=your-secure-admin-password
+BLOB_READ_WRITE_TOKEN=your-vercel-blob-read-write-token
 
-HOW TO UPDATE FROM PHONE:
-1. Open your-site.vercel.app/admin.html
-2. Add/edit duas.
-3. Click Save Live.
-4. Open daily-dhikr.html and hard refresh if needed.
+How to get BLOB_READ_WRITE_TOKEN:
+1) Vercel Dashboard > Your Project > Storage
+2) Create Database > Blob
+3) Connect the Blob store to this project
+4) Check Project Settings > Environment Variables
+5) Redeploy after the token is added
 
-NOTE:
-Do not put BLOB_READ_WRITE_TOKEN in frontend HTML. It stays safely in Vercel environment variables and is used only by api/packs.js.
+The hidden admin page is:
+/secure-aliwvide-control-9xq2m

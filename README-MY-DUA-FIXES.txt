@@ -1,6 +1,6 @@
-My Dua Counter fixes:
-1. Delete Dua now saves live automatically to Vercel Blob, so deleted duas disappear from the My Dua page after refresh.
-2. Added Recitation Limit field in admin. You can set 100, 313, 1000, or any number above 100.
-3. My Dua Counter page now uses each dua's custom limit instead of hardcoded 100.
+MY DUA FIXES
 
-After deploying to Vercel, open admin.html, edit My Dua, set limit, click Save Live.
+1. My Dua Counter now loads live duas from /api/counter-duas.
+2. My Dua save writes to Vercel Blob.
+3. Admin supports add, edit, delete, target count, Arabic text, meaning, and note.
+4. Public page keeps local progress/counts separately in browser storage.
