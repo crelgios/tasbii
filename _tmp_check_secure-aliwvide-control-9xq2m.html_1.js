@@ -334,10 +334,7 @@ function moveStep(index, dir){
 
 async function loadCounterDuas(){
   try{
-    const res = await fetch(COUNTER_DUAS_URL + "?v=" + Date.now(), {
-      cache:"no-store",
-      headers:{"Cache-Control":"no-cache","Pragma":"no-cache"}
-    });
+    const res = await fetch(COUNTER_DUAS_URL, {cache:"no-store"});
     if(res.ok){
       const data = await res.json();
       const list = Array.isArray(data) ? data : (Array.isArray(data.duas) ? data.duas : []);
@@ -349,11 +346,11 @@ async function loadCounterDuas(){
   ];
 }
 
-function renderCounterDuas(){
+function renderCounterDuas(updateEditor = true){
   if(!counterDuaList) return;
   counterDuaList.innerHTML = "";
   if(!counterDuas.length){
-    counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
+    counterDuas.push({id:"dua_" + Date.now(), title:"", arabic:"", meaning:"", limit:100, note:""});
   }
   if(activeCounterIndex < 0 || activeCounterIndex >= counterDuas.length) activeCounterIndex = 0;
 
@@ -371,7 +368,7 @@ function renderCounterDuas(){
     };
     counterDuaList.appendChild(div);
   });
-  renderCounterEditor();
+  if(updateEditor) renderCounterEditor();
 }
 
 function renderCounterEditor(){
@@ -405,17 +402,17 @@ function renderCounterPreview(){
 function syncCounterEditor(){
   const dua = counterDuas[activeCounterIndex];
   if(!dua) return;
-  dua.title = counterTitle.value.trim() || "Untitled Dua";
+  dua.title = counterTitle.value;
   dua.arabic = counterArabic.value;
-  dua.meaning = counterMeaning.value.trim();
+  dua.meaning = counterMeaning.value;
   dua.limit = Math.max(1, Number(counterLimit && counterLimit.value) || Number(dua.limit) || 100);
-  dua.note = counterNote.value.trim() || ("Recite " + dua.limit + " times");
-  dua.id = dua.id || slugify(dua.title);
+  dua.note = counterNote.value;
+  dua.id = dua.id || ("dua_" + Date.now());
 }
 
 function addCounterDua(){
   syncCounterEditor();
-  counterDuas.push({id:"dua_" + Date.now(), title:"New Dua", arabic:"", meaning:"", limit:100, note:"Recite 100 times"});
+  counterDuas.push({id:"dua_" + Date.now(), title:"", arabic:"", meaning:"", limit:100, note:""});
   activeCounterIndex = counterDuas.length - 1;
   renderCounterDuas();
   showToast("Counter dua added");
@@ -435,6 +432,17 @@ async function deleteCounterDua(){
   }
 }
 
+function cleanCounterDuasForSave(){
+  return counterDuas.map((dua, index) => ({
+    id: dua.id || ("dua_" + Date.now() + "_" + index),
+    title: String(dua.title || "Untitled Dua"),
+    arabic: String(dua.arabic || ""),
+    meaning: String(dua.meaning || ""),
+    limit: Math.max(1, Number(dua.limit) || 100),
+    note: String(dua.note || ("Recite " + (Math.max(1, Number(dua.limit) || 100)) + " times"))
+  }));
+}
+
 async function saveCounterDuasLive(){
   try{
     if(counterDuas[activeCounterIndex]) syncCounterEditor();
@@ -443,7 +451,7 @@ async function saveCounterDuasLive(){
     const res = await fetch(COUNTER_DUAS_URL, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({password, duas: counterDuas})
+      body: JSON.stringify({password, duas: cleanCounterDuasForSave()})
     });
     const data = await res.json().catch(()=>({}));
     if(!res.ok){
@@ -515,6 +523,19 @@ document.getElementById("exportBtn").onclick = exportCode;
 document.getElementById("addCounterDuaBtn").onclick = addCounterDua;
 document.getElementById("deleteCounterDuaBtn").onclick = deleteCounterDua;
 document.getElementById("saveCounterDuasBtn").onclick = saveCounterDuasLive;
-[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(); renderCounterPreview(); }); });
+[counterTitle,counterArabic,counterMeaning,counterLimit,counterNote].forEach(el=>{ if(el) el.addEventListener("input",()=>{ syncCounterEditor(); renderCounterDuas(false); renderCounterPreview(); }); });
+
+function switchAdminPanel(panel){
+  const dailyActive = panel === "daily";
+  document.getElementById("dailyAdminTab").classList.toggle("active", dailyActive);
+  document.getElementById("myDuaAdminTab").classList.toggle("active", !dailyActive);
+  document.getElementById("dailyAdminPanel").classList.toggle("active", dailyActive);
+  document.getElementById("myDuaAdminPanel").classList.toggle("active", !dailyActive);
+  localStorage.setItem("adminActivePanel", panel);
+}
+document.getElementById("dailyAdminTab").onclick = () => switchAdminPanel("daily");
+document.getElementById("myDuaAdminTab").onclick = () => switchAdminPanel("mydua");
+const savedAdminPanel = localStorage.getItem("adminActivePanel");
+if(savedAdminPanel === "mydua") switchAdminPanel("mydua");
 
 init();
