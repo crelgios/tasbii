@@ -83,13 +83,21 @@ module.exports = async function handler(req,res){
   if(req.method==='OPTIONS') return res.status(204).end();
 
   if(req.method==='GET'){
+    let blobError = null;
     try{
       const data = await readBlobDuas();
       if(data && data.length) return res.status(200).json({ok:true, source:'blob-merged', updatedAt:new Date().toISOString(), duas:data});
     }catch(e){
+      blobError = e && e.message ? e.message : String(e);
       // Keep page alive with JSON fallback until Blob env/store is configured.
     }
-    return res.status(200).json({ok:true, source:'fallback', updatedAt:new Date().toISOString(), duas:validateDuas(readFallbackFile())});
+    const payload = {ok:true, source:'fallback', updatedAt:new Date().toISOString(), duas:validateDuas(readFallbackFile())};
+    if (req.query && req.query.debug === '1') {
+      payload.blobError = blobError;
+      payload.tokenConfigured = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+      payload.adminPasswordConfigured = Boolean(process.env.ADMIN_PASSWORD);
+    }
+    return res.status(200).json(payload);
   }
 
   if(req.method==='POST'){
