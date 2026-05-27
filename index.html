@@ -29,6 +29,23 @@ body.is-leaving{animation:pageFadeOut .28s ease both;pointer-events:none;}
   .stats{margin-top:12px;padding:14px;grid-template-columns:1fr}
   .app,.card,.quick-select-section{max-width:100%;overflow-x:hidden}
 }
+
+/* Desktop usability fix: bigger clickable counter area, balanced layout, and no cramped cards on PC. */
+@media(min-width:761px){
+  .app{width:min(1100px,100%)}
+  .hero{grid-template-columns:minmax(520px,1.15fr) minmax(300px,.85fr);align-items:center;gap:24px}
+  .quick-select-section{max-width:720px;margin:10px auto 22px}
+  .counter-card{min-height:620px;display:flex;flex-direction:column;justify-content:center;padding:30px 34px}
+  .name-display{min-height:160px}
+  .counter-ring{width:165px;margin:6px auto 10px}
+  .counter-number{font-size:3.45rem}
+  .count-button{width:238px;height:238px;font-size:3.05rem;margin:8px auto 0;display:grid;place-items:center}
+  .count-button::after{content:"TAP / SPACE";bottom:38px;font-size:.78rem;letter-spacing:1.8px}
+  .stats{align-self:stretch;align-content:center;padding:28px;gap:18px}
+  .stat{padding:18px 20px}
+  .pill,.premium-select{font-size:1rem}
+}
+
 </style>
 </head>
 <body>
@@ -51,7 +68,7 @@ function scrollToTapButton(){
     }, 180);
   }, 80);
 }
-countButton.addEventListener('click',handleCount);resetButton.addEventListener('click',resetCurrentCounter);resetAllButton.addEventListener('click',resetAllProgress);themeToggleButton.addEventListener('click',toggleTheme);searchInput.addEventListener('change',e=>{currentNameIndex=Number(e.target.value)||0;counter=0;updateAll();populateNamesGrid();saveProgress();scrollToTapButton();});document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});initializeApp();
+countButton.addEventListener('click',handleCount);document.addEventListener('keydown',function(e){if(e.code==='Space'||e.code==='Enter'){var tag=(document.activeElement&&document.activeElement.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'||document.activeElement?.isContentEditable)return;e.preventDefault();handleCount(e);}});resetButton.addEventListener('click',resetCurrentCounter);resetAllButton.addEventListener('click',resetAllProgress);themeToggleButton.addEventListener('click',toggleTheme);searchInput.addEventListener('change',e=>{currentNameIndex=Number(e.target.value)||0;counter=0;updateAll();populateNamesGrid();saveProgress();scrollToTapButton();});document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});initializeApp();
 </script>
 <script>
 (function(){
