@@ -63,10 +63,10 @@ async function readBlobDuas(){
   const versions = await readAllJson({ livePrefix: LIVE_PREFIX, legacyFile: LEGACY_FILE, label: 'counter duas' });
   if (!versions.length) return null;
 
-  // Every admin save is a complete snapshot of the dua list. Using only the
-  // newest live snapshot is important: merging historical snapshots restores
-  // items that an admin intentionally deleted.
-  const newestLive = versions.find(v => String(v && v.name || '').startsWith(LIVE_PREFIX));
+  // Admin saves are complete snapshots, not partial updates. Always use the
+  // newest live snapshot so an intentionally deleted dua is not restored from
+  // an older blob version. readAllJson returns newest entries first.
+  const newestLive = versions.find(v => String(v && v.pathname || '').startsWith(LIVE_PREFIX));
   const newest = newestLive || versions[0];
   return validateDuas(newest.data);
 }
@@ -101,8 +101,8 @@ module.exports = async function handler(req,res){
       const body = await parseJsonBody(req);
       if(body.password!==adminPassword) return res.status(401).json({error:'Wrong admin password'});
       const duas=validateDuas(body.duas);
-      if(!duas.length) throw new Error('Add at least one dua');
 
+      // Empty arrays are valid: this lets the admin delete the final remaining dua too.
       const blob=await writeUniqueJson({ prefix: LIVE_PREFIX, data: duas });
       return res.status(200).json({ok:true, duas, blobUrl:blob.url, updatedAt:new Date().toISOString()});
     }catch(error){return res.status(400).json({error:error.message||'Save failed'});}
