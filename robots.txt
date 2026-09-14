@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /tasbii-private-admin
+Disallow: /tasbii-private-admin.html
+Disallow: /api/
+
+Sitemap: https://tasbii.vercel.app/sitemap.xml
