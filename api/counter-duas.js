@@ -16,7 +16,6 @@ function setNoStore(res){
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Cache-Control, Pragma');
 }
 
-
 async function parseJsonBody(req) {
   if (req.body && typeof req.body === 'object') return req.body;
   if (typeof req.body === 'string') {
@@ -55,18 +54,6 @@ function validateDuas(input){
   }).filter(d => d.title || d.arabic);
 }
 
-function mergeDuaLists(lists){
-  const map = new Map();
-  // Apply older first, latest last. Missing older duas remain, updated latest duas win.
-  for (const list of lists.reverse()) {
-    for (const dua of validateDuas(list)) {
-      const key = dua.id || slugify(dua.title);
-      map.set(key, { ...(map.get(key) || {}), ...dua });
-    }
-  }
-  return Array.from(map.values());
-}
-
 function readFallbackFile(){
   try{return JSON.parse(fs.readFileSync(path.join(process.cwd(),'data','counter-duas.json'),'utf8'));}
   catch(e){return [];} 
@@ -75,7 +62,13 @@ function readFallbackFile(){
 async function readBlobDuas(){
   const versions = await readAllJson({ livePrefix: LIVE_PREFIX, legacyFile: LEGACY_FILE, label: 'counter duas' });
   if (!versions.length) return null;
-  return mergeDuaLists(versions.map(v => v.data));
+
+  // Every admin save is a complete snapshot of the dua list. Using only the
+  // newest live snapshot is important: merging historical snapshots restores
+  // items that an admin intentionally deleted.
+  const newestLive = versions.find(v => String(v && v.name || '').startsWith(LIVE_PREFIX));
+  const newest = newestLive || versions[0];
+  return validateDuas(newest.data);
 }
 
 module.exports = async function handler(req,res){
@@ -86,7 +79,7 @@ module.exports = async function handler(req,res){
     let blobError = null;
     try{
       const data = await readBlobDuas();
-      if(data && data.length) return res.status(200).json({ok:true, source:'blob-merged', updatedAt:new Date().toISOString(), duas:data});
+      if(data) return res.status(200).json({ok:true, source:'blob-latest', updatedAt:new Date().toISOString(), duas:data});
     }catch(e){
       blobError = e && e.message ? e.message : String(e);
       // Keep page alive with JSON fallback until Blob env/store is configured.
